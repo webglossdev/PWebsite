@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contato | Seu Nome</title>
+    <link rel="stylesheet" href="style.css">
+    
+    <!-- tsParticles (Necessário para a física das estrelas funcionar no fundo) -->
+    <script src="https://cdn.jsdelivr.net/npm/tsparticles-engine@2/tsparticles.engine.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/tsparticles-basic@2/tsparticles.basic.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/tsparticles-interaction-external-repulse@2/tsparticles.interaction.external.repulse.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/tsparticles-shape-star@2/tsparticles.shape.star.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/tsparticles-shape-image@2/tsparticles.shape.image.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/tsparticles@2/tsparticles.bundle.min.js"></script>
+
+    <style>
+        /* Estilos específicos para o formulário de vidro desta página */
+        .contact-form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .glass-input {
+            width: 100%;
+            padding: 15px 20px;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: #fff;
+            font-family: 'Segoe UI', sans-serif;
+            font-size: 1rem;
+            backdrop-filter: blur(10px);
+            box-sizing: border-box;
+            transition: all 0.3s ease;
+        }
+
+        .glass-input::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .glass-input:focus {
+            outline: none;
+            background: rgba(255, 255, 255, 0.1);
+            border-color: #00a2ff;
+            box-shadow: 0 0 15px rgba(0, 162, 255, 0.3);
+        }
+
+        textarea.glass-input {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        .contact-grid {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 60px;
+            width: 100%;
+            max-width: 1000px;
+        }
+
+        /* Pequeno ajuste para os cards de contato não ficarem tão altos */
+        .contact-grid .bubble-card {
+            padding: 25px;
+            max-width: 220px;
+        }
+
+        .contact-grid h3 {
+            margin: 0 0 10px 0;
+            font-size: 1.1rem;
+            color: #fff;
+        }
+
+        .contact-grid p {
+            margin: 0;
+            font-size: 0.95rem;
+            color: #00ffcc; /* Verde neon para destacar os números/emails */
+        }
+    </style>
+</head>
+<body>
+    
+    <div class="content-wrapper">
+        <header class="hero">
+            <h1 class="glossy-text" style="font-size: 3rem;">Contatos</h1>
+            <p class="subtitle">Vamos planejar algo juntos.</p>
+        </header>
+
+        <!-- Bolhas de Contato Direto -->
+        <div class="contact-grid">
+            <div class="bubble-card">
+                <div class="bloom"></div>
+                <h3>📱 Meu Número</h3>
+                <p>(99) 99999-9999</p>
+            </div>
+            
+            <div class="bubble-card">
+                <div class="bloom"></div>
+                <h3>Bolha</h3>
+                <p>Texto.</p>
+            </div>
+
+            <div class="bubble-card">
+                <div class="bloom"></div>
+                <h3>Bolha</h3>
+                <p>Texto.</p>
+            </div>
+
+            <div class="bubble-card">
+                <div class="bloom"></div>
+                <h3>📧 E-mail</h3>
+                <p>Texto.</p>
+            </div>
+        </div>
+
+        <!-- Formulário integrado com Discord Webhook -->
+        <div class="glass-card" style="width: 100%; max-width: 600px; text-align: left;">
+            <h2 style="text-align: center; color: white; margin-top: 0;">Envie uma mensagem direta</h2>
+            <p style="text-align: center; color: #b0c4de; font-size: 0.9rem;">(A mensagem chegará direto no meu servidor do Discord)</p>
+            
+            <form id="discord-form" class="contact-form">
+                <input type="text" id="nome" class="glass-input" placeholder="Seu Nome / Empresa" required>
+                <input type="email" id="email" class="glass-input" placeholder="Seu E-mail para retorno" required>
+                <textarea id="mensagem" class="glass-input" placeholder="Sua Mensagem..." required></textarea>
+                
+                <button type="submit" class="btn-primary" style="width: 100%; cursor: pointer; border: none; font-size: 1.1rem; padding: 15px;">
+                    🚀 Enviar Mensagem
+                </button>
+            </form>
+        </div>
+        <section class="qa-section qa-contact">
+            <div class="faq-container">
+                <details class="faq-item">
+                    <summary>Pergunta 1</summary>
+                    <div class="faq-content">
+                        <p>Resposta.</p>
+                    </div>
+                </details>
+            </div>
+        </section>
+
+    </div>
+
+    <!-- O Layout (Fundo, Menu e Rodapé) -->
+    <script src="layout.js"></script>
+    <!-- As Partículas (Estrelas) -->
+    <script src="script.js"></script>
+
+    <!-- Lógica do Webhook do Discord -->
+    <script>
+        document.getElementById('discord-form').addEventListener('submit', function(e) {
+            e.preventDefault(); // Impede a página de recarregar
+
+            const nome = document.getElementById('nome').value;
+            const email = document.getElementById('email').value;
+            const mensagem = document.getElementById('mensagem').value;
+            const botao = document.querySelector('button[type="submit"]');
+
+           
+            const _p1 = "Você achou mesmo";
+            const _p2 = "que eu teria esquecido";
+            const _p3 = "de remover meu webhook?";
+            
+            
+            const webhookUrl = atob(_p1) + atob(_p2) + atob(_p3);
+
+            // Muda o texto do botão para dar feedback ao usuário
+            botao.innerHTML = '⏳ Enviando...';
+            botao.style.opacity = '0.7';
+            botao.disabled = true;
+
+            // Formata a mensagem para o Discord
+            const payload = {
+                content: ` ${nome}\n ${email}\n ${mensagem}`
+            };
+
+            // Envia os dados
+            fetch(webhookUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(payload)
+            })
+            .then(response => {
+                if(response.ok) {
+                    botao.innerHTML = '✅ Mensagem Enviada!';
+                    botao.style.background = 'rgba(0, 255, 128, 0.4)'; // Fica verde
+                    document.getElementById('discord-form').reset(); // Limpa os campos
+                } else {
+                    throw new Error('Erro ao enviar');
+                }
+            })
+            .catch(error => {
+                botao.innerHTML = '❌ Erro ao enviar. Tente pelo e-mail.';
+                botao.style.background = 'rgba(255, 50, 50, 0.4)'; // Fica vermelho
+            })
+            .finally(() => {
+                // Restaura o botão depois de 4 segundos
+                setTimeout(() => {
+                    botao.innerHTML = '🚀 Enviar Mensagem';
+                    botao.style.opacity = '1';
+                    botao.style.background = '';
+                    botao.disabled = false;
+                }, 4000);
+            });
+        });
+    </script>
+</body>
+</html>
