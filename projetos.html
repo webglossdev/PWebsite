@@ -1,292 +1,328 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Projetos | Seu Nome</title>
+    <title>Projetos | Exemplo</title>
     <link rel="stylesheet" href="style.css">
-    
-    <!-- tsParticles -->
-    <script src="https://cdn.jsdelivr.net/npm/tsparticles-engine@2/tsparticles.engine.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/tsparticles-basic@2/tsparticles.basic.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/tsparticles-interaction-external-repulse@2/tsparticles.interaction.external.repulse.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/tsparticles-shape-star@2/tsparticles.shape.star.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/tsparticles-shape-image@2/tsparticles.shape.image.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/tsparticles@2/tsparticles.bundle.min.js"></script>
-
-    <style>
-        /* Estilos Específicos para a Página de Projetos */
-        .projects-container {
-            width: 100%;
-            max-width: 900px;
-            display: flex;
-            flex-direction: column;
-            gap: 50px;
-            margin-top: 40px;
-            text-align: left;
-        }
-
-        .project-card {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            border-radius: 24px;
-            padding: 40px;
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            box-shadow: inset 0 0 20px rgba(255, 255, 255, 0.05), 0 20px 40px rgba(0, 0, 0, 0.4);
-            position: relative;
-            overflow: hidden;
-            transition: transform 0.3s ease, border-color 0.3s ease;
-        }
-
-        .project-card:hover {
-            transform: translateY(-5px);
-            border-color: rgba(0, 162, 255, 0.4);
-        }
-
-        /* Efeito de brilho no topo do card */
-        .project-card::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; right: 0; height: 100px;
-            background: linear-gradient(to bottom, rgba(255,255,255,0.05), transparent);
-            pointer-events: none;
-        }
-
-        .project-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            margin-bottom: 20px;
-            flex-wrap: wrap;
-            gap: 15px;
-        }
-
-        .project-title {
-            margin: 0;
-            font-size: 2rem;
-            color: #fff;
-            text-shadow: 0 0 15px rgba(0, 162, 255, 0.5);
-        }
-
-        .status-badge {
-            background: rgba(255, 50, 50, 0.15);
-            border: 1px solid rgba(255, 50, 50, 0.3);
-            color: #ffb3b3;
-            padding: 6px 12px;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            font-weight: bold;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-
-        .tech-stack {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            margin-bottom: 25px;
-        }
-
-        .tech-pill {
-            background: rgba(0, 162, 255, 0.1);
-            border: 1px solid rgba(0, 162, 255, 0.3);
-            color: #b3e0ff;
-            padding: 5px 12px;
-            border-radius: 8px;
-            font-size: 0.85rem;
-            font-family: monospace;
-        }
-
-        .project-section {
-            margin-bottom: 20px;
-        }
-
-        .project-section h4 {
-            color: #00ffcc;
-            margin: 0 0 8px 0;
-            font-size: 1.1rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .project-section p {
-            color: #b0c4de;
-            line-height: 1.6;
-            margin: 0;
-            font-size: 0.95rem;
-        }
-
-        /* Lista de Milestones (Passos Futuros) */
-        .milestones {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-        }
-
-        .milestones li {
-            position: relative;
-            padding-left: 25px;
-            color: #d0e0ff;
-            margin-bottom: 10px;
-            font-size: 0.95rem;
-        }
-
-        .milestones li::before {
-            content: '📌';
-            position: absolute;
-            left: 0;
-            top: 1px;
-            font-size: 0.9rem;
-        }
-
-        .milestones li.done::before {
-            content: '✅';
-        }
-
-        .milestones li.done {
-            opacity: 0.6;
-            text-decoration: line-through;
-        }
-
-        /* Projetos Futuros (Card diferente) */
-        .future-projects {
-            margin-top: 80px;
-            width: 100%;
-            max-width: 900px;
-        }
-
-        .future-card {
-            background: rgba(138, 43, 226, 0.05); /* Fundo puxado pro roxo */
-            border: 1px dashed rgba(138, 43, 226, 0.4);
-            border-radius: 24px;
-            padding: 30px;
-            text-align: left;
-            margin-bottom: 20px;
-        }
-
-        .future-card h3 {
-            color: #d4a5ff;
-            margin: 0 0 10px 0;
-            font-size: 1.4rem;
-        }
-
-        .future-card p {
-            color: #b0c4de;
-            line-height: 1.6;
-            margin: 0;
-        }
-    </style>
+    <script defer src="https://cdn.jsdelivr.net/npm/tsparticles-engine@2/tsparticles.engine.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/tsparticles-basic@2/tsparticles.basic.min.js"></script>
+    <script defer
+        src="https://cdn.jsdelivr.net/npm/tsparticles-interaction-external-repulse@2/tsparticles.interaction.external.repulse.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/tsparticles-shape-star@2/tsparticles.shape.star.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/tsparticles-shape-image@2/tsparticles.shape.image.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/tsparticles@2/tsparticles.bundle.min.js"></script>
 </head>
+
 <body>
-    
+
     <div class="content-wrapper">
         <header class="hero">
-            <h1 class="glossy-text" style="font-size: 3rem;">Texto</h1>
-            <p class="subtitle">Subtexto.</p>
+            <h1 class="glossy-text" style="font-size: 3rem;">Exemplo</h1>
+            <p class="subtitle">Exemplo</p>
         </header>
 
         <main class="projects-container">
-            
-            <!-- PROJETO 1 -->
-            <article class="project-card">
-                <div class="project-header">
-                    <h2 class="project-title">Exemplo</h2>
-                    <div class="status-badge">🔒 Privado</div>
-                </div>
-
-                <div class="tech-stack">
-                    <span class="tech-pill">Exemplo 1</span>
-                    <span class="tech-pill">Exemplo 2</span>
-                </div>
-
-                <div class="project-section">
-                    <h4>Texto</h4>
-                    <p>Texto</p>
-                </div>
-
-                <div class="project-section">
-                    <h4>Texto</h4>
-                    <p>Texto</p>
-                </div>
-
-                 <div class="project-section">
-                    <h4>Texto</h4>
-                    <p>Texto</p>
-                </div>
-
-                <div class="project-section">
-                    <h4>Texto</h4>
-                    <ul class="milestones">
-                        <li class="done">Exemplo</li>
-                        <li>Exemplo</li>
-                        </ul>
-                </div>
-            </article>
 
             <article class="project-card">
                 <div class="project-header">
                     <h2 class="project-title">Exemplo</h2>
-                    <div class="status-badge public">🔒 Público</div>
+                    <div class="status-badge">Exemplo</div>
                 </div>
 
                 <div class="tech-stack">
-                    <span class="tech-pill">Exemplo 1</span>
-                    <span class="tech-pill">Exemplo 2</span>
+                    <span class="tech-pill">Exemplo</span>
+                    <span class="tech-pill">Exemplo</span>
+                    <span class="tech-pill">Exemplo</span>
+                    <span class="tech-pill">Exemplo</span>
+                    <span class="tech-pill">Exemplo</span>
+                    <span class="tech-pill">Exemplo</span>
+                    <span class="tech-pill">Exemplo</span>
                 </div>
 
                 <div class="project-section">
-                    <h4>Texto</h4>
-                    <p>Texto</p>
+                    <h4>Exemplo</h4>
+                    <p>Exemplo</p>
                 </div>
 
                 <div class="project-section">
-                    <h4>Texto</h4>
-                    <p>Texto</p>
-                </div>
-
-                 <div class="project-section">
-                    <h4>Texto</h4>
-                    <p>Texto</p>
+                    <h4>Exemplo</h4>
+                    <p>Exemplo</p>
                 </div>
 
                 <div class="project-section">
-                    <h4>Texto</h4>
+                    <h4>Exemplo</h4>
+                    <p>Exemplo</p>
+                </div>
+
+                <div class="project-section">
+                    <h4>Exemplo</h4>
                     <ul class="milestones">
                         <li class="done">Exemplo</li>
+                        <li class="done">Exemplo</li>
+                        <li class="done">Exemplo</li>
                         <li>Exemplo</li>
-                        </ul>
+                    </ul>
                 </div>
-            </article>
-                
-                <!-- Botão de Acesso ao Repositório -->
-                <div class="project-section" style="margin-top: -40px;">
-                    <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ" target="_blank" class="btn-secondary" style="display: inline-flex; align-items: center; gap: 10px;">
-                        <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                            <path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.477 2 2 6.477 2 12c0 4.42 2.865 8.166 6.839 9.489.5.092.682-.217.682-.482 0-.237-.008-.866-.013-1.7-2.782.603-3.369-1.34-3.369-1.34-.454-1.156-1.11-1.464-1.11-1.464-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.831.092-.646.35-1.086.636-1.336-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.578 9.578 0 0112 6.836c.85.004 1.705.114 2.504.336 1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.203 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.743 0 .267.18.578.688.48C19.138 20.161 22 16.418 22 12c0-5.523-4.477-10-10-10z"/>
+
+                <div class="project-section" style="margin-top: 30px;">
+                    <a href="#" target="_blank" class="btn-secondary"
+                        style="display: inline-flex; align-items: center; gap: 10px;">
+                        <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" clip-rule="evenodd"
+                                d="M12 2C6.477 2 2 6.477 2 12c0 4.42 2.865 8.166 6.839 9.489.5.092.682-.217.682-.482 0-.237-.008-.866-.013-1.7-2.782.603-3.369-1.34-3.369-1.34-.454-1.156-1.11-1.464-1.11-1.464-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.831.092-.646.35-1.086.636-1.336-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.578 9.578 0 0112 6.836c.85.004 1.705.114 2.504.336 1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.203 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.743 0 .267.18.578.688.48C19.138 20.161 22 16.418 22 12c0-5.523-4.477-10-10-10z" />
                         </svg>
-                        Acessar
+                        Acessar Repositório
+                    </a>
+                </div>
+            </article>
+            <article class="project-card">
+                <div class="project-header">
+                    <h2 class="project-title">Exemplo</h2>
+                    <div class="status-badge">Exemplo</div>
+                </div>
+
+                <div class="tech-stack">
+                    <span class="tech-pill">Exemplo</span>
+                    <span class="tech-pill">Exemplo</span>
+                    <span class="tech-pill">Exemplo</span>
+                    <span class="tech-pill">Exemplo</span>
+                </div>
+
+                <div class="project-section">
+                    <h4>Exemplo</h4>
+                    <p>Exemplo</p>
+                </div>
+
+                <div class="project-section">
+                    <h4>Exemplo</h4>
+                    <p>Exemplo</p>
+                </div>
+
+                <div class="project-section">
+                    <h4>Exemplo</h4>
+                    <p>Exemplo</p>
+                </div>
+
+                <div class="project-section">
+                    <h4>Exemplo</h4>
+                    <ul class="milestones">
+                        <li class="done">Exemplo</li>
+                        <li class="done">Exemplo</li>
+                        <li>Exemplo</li>
+                    </ul>
+                </div>
+            </article>
+            <article class="project-card">
+                <div class="project-header">
+                    <h2 class="project-title">Exemplo</h2>
+                    <div class="status-badge">Exemplo</div>
+                </div>
+
+                <div class="tech-stack">
+                    <span class="tech-pill">Exemplo</span>
+                    <span class="tech-pill">Exemplo</span>
+                    <span class="tech-pill">Exemplo</span>
+                    <span class="tech-pill">Exemplo</span>
+                </div>
+
+                <div class="project-section">
+                    <h4>O Quê e Como:</h4>
+                    <p>Minha máquina pessoal que estou construindo lentamente conforme minha renda, feita para rodar
+                        absolutamente tudo que eu preciso e quero, com peças escolhidas, montadas, configuradas,
+                        customizadas e com overclock por mim mesmo. É provavelmente o projeto que mais tenho ansiedade
+                        para completar, já que com ele vou poder experimentar na prática de verdade meus hobbies mais
+                        "pesados" como workloads de IA e vou poder ter o orgulho de ter feito tudo sozinho e customizado
+                        peças por mim mesmo usando designs meus em adesivos e "shells" custom para GPUs.</p>
+                </div>
+
+                <div class="project-section">
+                    <h4>Exemplo</h4>
+                    <p>Exemplo</p>
+                </div>
+
+                <div class="project-section">
+                    <h4>Exemplo</h4>
+                    <p>Exemplo</p>
+                </div>
+
+                <div class="project-section">
+                    <h4>Exemplo</h4>
+                    <ul class="milestones">
+                        <li class="done">Exemplo</li>
+                        <li class="done">Exemplo</li>
+                        <li>Exemplo</li>
+                        <li>Exemplo</li>
+                    </ul>
+                </div>
+            </article>
+            <article class="project-card">
+                <div class="project-header">
+                    <h2 class="project-title">Exemplo</h2>
+                    <div class="status-badge">Exemplo</div>
+                </div>
+
+                <div class="tech-stack">
+                    <span class="tech-pill">Exemplo</span>
+                    <span class="tech-pill">Exemplo</span>
+                    <span class="tech-pill">Exemplo</span>
+                    <span class="tech-pill">Exemplo</span>
+                    <span class="tech-pill">Exemplo</span>
+                </div>
+
+                <div class="project-section">
+                    <h4>Exemplo</h4>
+                    <p>Exemplo</p>
+                </div>
+
+                <div class="project-section">
+                    <h4>Exemplo</h4>
+                    <p>Exemplo</p>
+                </div>
+
+                <div class="project-section">
+                    <h4>Exemplo</h4>
+                    <p>Exemplo</p>
+                </div>
+
+                <div class="project-section">
+                    <h4>Exemplo</h4>
+                    <ul class="milestones">
+                        <li class="done">Exemplo</li>
+                        <li>Exemplo</li>
+                    </ul>
+                </div>
+            </article>
+            <article class="project-card">
+                <div class="project-header">
+                    <h2 class="project-title">Exemplo</h2>
+                    <div class="status-badge">Exemplo</div>
+                </div>
+
+                <div class="tech-stack">
+                    <span class="tech-pill">Exemplo</span>
+                    <span class="tech-pill">Exemplo</span>
+                    <span class="tech-pill">Exemplo</span>
+                    <span class="tech-pill">Exemplo</span>
+                    <span class="tech-pill">Exemplo</span>
+                </div>
+
+                <div class="project-section">
+                    <h4>Exemplo</h4>
+                    <p>Exemplo</p>
+                </div>
+
+                <div class="project-section">
+                    <h4>Exemplo</h4>
+                    <p>Exemplo</p>
+                </div>
+
+                <div class="project-section">
+                    <h4>Exemplo</h4>
+                    <p>Exemplo</p>
+                </div>
+
+                <div class="project-section">
+                    <h4>Exemplo</h4>
+                    <ul class="milestones">
+                        <li class="done">Exemplo</li>
+                        <li>Exemplo</li>
+                        <li>Exemplo</li>
+                    </ul>
+                </div>
+
+            </article>
+
+            <article class="project-card">
+                <div class="project-header">
+                    <h2 class="project-title">Exemplo</h2>
+                    <div class="status-badge public">Exemplo</div>
+                </div>
+
+                <div class="tech-stack">
+                    <span class="tech-pill">Exemplo</span>
+                    <span class="tech-pill">Exemplo</span>
+                    <span class="tech-pill">Exemplo</span>
+                </div>
+
+                <div class="project-section">
+                    <h4>Exemplo</h4>
+                    <p>Exemplo</p>
+                </div>
+
+                <div class="project-section">
+                    <h4>Exemplo</h4>
+                    <p>Exemplo</p>
+                </div>
+
+                <div class="project-section">
+                    <h4>Exemplo</h4>
+                    <p>Exemplo</p>
+                </div>
+
+                <div class="project-section">
+                    <h4>Exemplo</h4>
+                    <ul class="milestones">
+                        <li class="done">Exemplo</li>
+                        <li class="done">Exemplo</li>
+                        <li class="done">Exemplo</li>
+                        <li class="done">Exemplo</li>
+                    </ul>
+                </div>
+                <div class="project-section" style="margin-top: 30px;">
+                    <a href="#" target="_blank" class="btn-secondary"
+                        style="display: inline-flex; align-items: center; gap: 10px;">
+                        <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" clip-rule="evenodd"
+                                d="M12 2C6.477 2 2 6.477 2 12c0 4.42 2.865 8.166 6.839 9.489.5.092.682-.217.682-.482 0-.237-.008-.866-.013-1.7-2.782.603-3.369-1.34-3.369-1.34-.454-1.156-1.11-1.464-1.11-1.464-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.831.092-.646.35-1.086.636-1.336-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.578 9.578 0 0112 6.836c.85.004 1.705.114 2.504.336 1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.203 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.743 0 .267.18.578.688.48C19.138 20.161 22 16.418 22 12c0-5.523-4.477-10-10-10z" />
+                        </svg>
+                        Exemplo
                     </a>
                 </div>
             </article>
 
         </main>
-        
         <section class="future-projects">
             <h2 class="section-title">Exemplo</h2>
-            <p style="text-align: center; color: #b0c4de; margin-bottom: 30px;">Projetos que estão na prancheta aguardando apenas eu adquirir mais experiência técnica.</p>
+            <p style="text-align: center; color: #b0c4de; margin-bottom: 30px;">Exemplo</p>
 
             <div class="future-card">
                 <h3>Exemplo</h3>
-                <p>Exemplo.</p>
+                <p>Exemplo</p>
+            </div>
+
+            <div class="future-card">
+                <h3>Exemplo</h3>
+                <p>Exemplo</p>
+            </div>
+
+            <div class="future-card">
+                <h3>Exemplo</h3>
+                <p>Exemplo</p>
+            </div>
+
+            <div class="future-card">
+                <h3>Exemplo</h3>
+                <p>Exemplo</p>
+            </div>
+
+            <div class="future-card">
+                <h3>Exemplo</h3>
+                <p>Exemplo</p>
+            </div>
+
+            <div class="future-card">
+                <h3>Exemplo</h3>
+                <p>Exemplo</p>
             </div>
         </section>
 
     </div>
-
-    <!-- O Layout Mágico (Fundo, Menu e Rodapé) -->
-    <script src="layout.js"></script>
-    <script src="script.js"></script>
+    <script defer src="layout.js"></script>
+    <script defer src="script.js"></script>
 </body>
+
 </html>

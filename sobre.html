@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sobre Mim | Exemplo</title>
+    <link rel="stylesheet" href="style.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/tsparticles-engine@2/tsparticles.engine.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/tsparticles-basic@2/tsparticles.basic.min.js"></script>
+    <script defer
+        src="https://cdn.jsdelivr.net/npm/tsparticles-interaction-external-repulse@2/tsparticles.interaction.external.repulse.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/tsparticles-shape-star@2/tsparticles.shape.star.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/tsparticles-shape-image@2/tsparticles.shape.image.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/tsparticles@2/tsparticles.bundle.min.js"></script>
+</head>
+
+<body>
+
+    <div class="content-wrapper">
+        <header class="hero">
+            <h1 class="glossy-text" style="font-size: 3rem;">Exemplo</h1>
+            <p class="subtitle">Exemplo</p>
+        </header>
+
+        <div class="about-container">
+            <nav class="tabs-nav">
+                <button class="tab-btn active" data-tab="jornada">Exemplo</button>
+                <button class="tab-btn" data-tab="stack">Exemplo</button>
+                <button class="tab-btn" data-tab="conquistas">Exemplo</button>
+                <button class="tab-btn" data-tab="setup">Exemplo</button>
+                <button class="tab-btn" data-tab="hobbies">Exemplo</button>
+            </nav>
+            <div class="glass-card tabs-content-box"
+                style="width: 100%; max-width: 900px; text-align: left; position: relative; min-height: 400px;">
+                <article id="jornada" class="tab-content active">
+                    <h2>Exemplo</h2>
+                    <p>Exemplo</p>
+
+                    <img src="sua-imagem1.jpg" alt="Exemplo" class="story-image" loading="lazy">
+
+                    <p>Exemplo</p>
+
+                    <img src="sua-imagem2.jpg" alt="Exemplo" class="story-image" loading="lazy">
+
+                    <p>Exemplo</p>
+                </article>
+                <article id="stack" class="tab-content">
+                    <h2>Exemplo</h2>
+                    <div class="stack-grid">
+                        <div class="stack-bubble">
+                            <span class="icon">🐍</span>
+                            <h3>Exemplo</h3>
+                            <p>Exemplo</p>
+                        </div>
+                        <div class="stack-bubble">
+                            <span class="icon">☁️</span>
+                            <h3>Exemplo</h3>
+                            <p>Exemplo</p>
+                        </div>
+                        <div class="stack-bubble">
+                            <span class="icon">🌐</span>
+                            <h3>Exemplo</h3>
+                            <p>Exemplo</p>
+                        </div>
+                    </div>
+                </article>
+                <article id="conquistas" class="tab-content">
+                    <h2>Exemplo</h2>
+
+                    <div class="course-list">
+                        <div class="course-item">
+                            <div class="course-header">
+                                <h3>Exemplo</h3>
+                                <span>Exemplo</span>
+                            </div>
+                            <p>Exemplo</p>
+                        </div>
+                        <div class="course-item">
+                            <div class="course-header">
+                                <h3><span class="icon">💻</span> Exemplo</h3>
+                                <img src="icone-instituicao.png" alt="Exemplo" class="inst-icon">
+                            </div>
+                            <div class="progress-container">
+                                <div class="progress-bar" style="width: 65%;"></div>
+                            </div>
+                            <p style="text-align: right; font-size: 0.8rem; margin-top: 5px;">Exemplo</p>
+                        </div>
+                    </div>
+                </article>
+                <article id="setup" class="tab-content">
+                    <h2>Exemplo</h2>
+                    <ul style="color: #b0c4de; line-height: 1.8; font-size: 1.05rem;">
+                        <li><strong>Exemplo:</strong> Exemplo</li>
+                        <li><strong>Exemplo:</strong> Exemplo</li>
+                        <li><strong>Exemplo:</strong> Exemplo</li>
+                        <li><strong>Exemplo:</strong> Exemplo</li>
+                        <li><strong>Exemplo:</strong> Exemplo</li>
+                    </ul>
+                    <p style="margin-top: 20px;">Exemplo</p>
+                </article>
+                <article id="hobbies" class="tab-content">
+                    <h2>Exemplo</h2>
+
+                    <div class="hobby-carousel">
+                        <div class="hobby-slide active">
+                            <img src="davinci.jpg" alt="Exemplo" class="hobby-img">
+                            <h3>Exemplo</h3>
+                            <p>Exemplo</p>
+                        </div>
+                        <div class="hobby-slide">
+                            <img src="bike.jpg" alt="Exemplo" class="hobby-img" loading="lazy">
+                            <h3>Exemplo</h3>
+                            <p>Exemplo</p>
+                        </div>
+                        <div class="hobby-slide">
+                            <img src="game.jpg" alt="Exemplo" class="hobby-img" loading="lazy">
+                            <h3>Exemplo</h3>
+                            <p>Exemplo</p>
+                        </div>
+                        <div class="carousel-controls">
+                            <button id="prev-hobby" class="arrow-btn">←</button>
+                            <span id="hobby-counter">Exemplo</span>
+                            <button id="next-hobby" class="arrow-btn">→</button>
+                        </div>
+                    </div>
+                </article>
+
+            </div>
+        </div>
+    </div>
+
+    <script defer src="layout.js"></script>
+    <script defer src="script.js"></script>
+    <script>
+        // ==========================================
+        // LÓGICA DAS ABAS (FADE-OUT / FADE-IN)
+        // ==========================================
+        const tabButtons = document.querySelectorAll('.tab-btn');
+        const tabContents = document.querySelectorAll('.tab-content');
+        let isAnimating = false; // Trava para o usuário não bugar a animação clicando rápido demais
+
+        tabButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                if (isAnimating || button.classList.contains('active')) return;
+                isAnimating = true;
+
+                const targetId = button.getAttribute('data-tab');
+                const currentTab = document.querySelector('.tab-content.active');
+                const nextTab = document.getElementById(targetId);
+
+                // Troca a cor dos botões imediatamente
+                document.querySelector('.tab-btn.active').classList.remove('active');
+                button.classList.add('active');
+
+                // Inicia o Fade Out do conteúdo atual
+                currentTab.classList.add('fading-out');
+
+                // Espera os 300ms do CSS terminar para trocar o display
+                setTimeout(() => {
+                    currentTab.classList.remove('active', 'fading-out'); // Tira o velho
+                    nextTab.classList.add('active'); // O novo ganha display:block e toca o fadeIn nativamente
+                    isAnimating = false; // Libera novos cliques
+                }, 300);
+            });
+        });
+
+        // ==========================================
+        // LÓGICA DO CARROSSEL DE HOBBIES
+        // ==========================================
+        const slides = document.querySelectorAll('.hobby-slide');
+        const btnNext = document.getElementById('next-hobby');
+        const btnPrev = document.getElementById('prev-hobby');
+        const counterText = document.getElementById('hobby-counter');
+        let currentSlide = 0;
+
+        function updateCarousel() {
+            slides.forEach(slide => slide.classList.remove('active'));
+            slides[currentSlide].classList.add('active');
+            counterText.innerText = `${currentSlide + 1} / ${slides.length}`;
+        }
+
+        btnNext.addEventListener('click', () => {
+            currentSlide = (currentSlide + 1) % slides.length; // Volta pro início se passar do último
+            updateCarousel();
+        });
+
+        btnPrev.addEventListener('click', () => {
+            currentSlide = (currentSlide - 1 + slides.length) % slides.length; // Vai pro último se voltar do primeiro
+            updateCarousel();
+        });
+    </script>
+</body>
+
+</html>

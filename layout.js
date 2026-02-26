@@ -14,17 +14,17 @@ const backgroundHTML = `
 const headerHTML = `
     <nav class="floating-header">
         <div class="nav-links left-links">
-            <a href="index.html">Início</a>
-            <a href="projetos.html">Projetos</a>
+            <a href="index.html">Exemplo</a>
+            <a href="projetos.html">Exemplo</a>
         </div>
         
         <div class="nav-logo">
-            <img src="logo.svg" alt="Logo">
+            <img src="logo.svg" alt="Exemplo">
         </div>
         
         <div class="nav-links right-links">
-            <a href="sobre.html">Sobre Mim</a>
-            <a href="contato.html">Contato</a>
+            <a href="sobre.html">Exemplo</a>
+            <a href="contato.html">Exemplo</a>
         </div>
     </nav>
 `;
@@ -32,25 +32,35 @@ const headerHTML = `
 // 3. Guarda o HTML do Rodapé e Créditos
 const footerHTML = `
     <footer class="social-footer">
-        <a href="#" target="_blank" class="social-pill">
-            <span class="icon">🔗</span> Link
+        <a href="https://exemplo.com" target="_blank" class="social-pill">
+            <span class="icon">🔗</span> Exemplo
         </a>
-        <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ" class="social-pill">
-            <span class="icon">🧐</span> bolha
+        <a href="mailto:exemplo@exemplo.com" class="social-pill">
+            <span class="icon">📧</span> Exemplo
         </a>
     </footer>
 
     <div class="site-credits">
-        <p>Texto de cima.<br>
-        Texto de baixo.</p>
+        <p>Exemplo<br>
+        Exemplo</p>
     </div>
 `;
 
-// Cabeçalho do ngc
-document.body.insertAdjacentHTML('afterbegin', backgroundHTML + headerHTML);
+// ==========================================
+// INJEÇÃO AUTOMÁTICA NA PÁGINA
+// ==========================================
+function injectLayout() {
+    // Injeta o Fundo e o Cabeçalho logo no começo da tag <body>
+    if (document.body) {
+        document.body.insertAdjacentHTML('afterbegin', backgroundHTML + headerHTML);
+    }
 
-// Injeta o Rodapé lá no finalzinho da div .content-wrapper
-const contentWrapper = document.querySelector('.content-wrapper');
-if (contentWrapper) {
-    contentWrapper.insertAdjacentHTML('beforeend', footerHTML);
+    // Injeta o Rodapé lá no finalzinho da div .content-wrapper
+    const contentWrapper = document.querySelector('.content-wrapper');
+    if (contentWrapper) {
+        contentWrapper.insertAdjacentHTML('beforeend', footerHTML);
+    }
 }
+
+// Executa imediatamente (será chamado após o carregamento do script)
+injectLayout();
