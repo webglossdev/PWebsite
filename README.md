@@ -4,10 +4,10 @@ Código do meu website, obviamente não é exatamente a mesma coisa que está no
 -
 Se quiser pode sugerir melhorias ao website ou reportar bugs e alternativas melhores à funções implementadas com: Issues ou Pull Requests.
 -
-Você tambem pode pegar esse código para usar no seu website, mas lembre de colocar que esse código tem partes feitas por IA (Gemini).
+Base do código feito por IA (Gemini 3.1 Pro) e depois editado e continuado por mim, usando VS CODE inicialmente e depois fiz a troca para o Google Antigravity (Copilot não é muito bom mas tem pontos positivos). Self-Hosted em uma VPS da Oracle Cloud com Ubuntu 22.04, Nginx rodando o site, e Nginx Proxy Manager gerindo o Proxy.
 
 
-Aqui tem um fluxograma explicando como foi meu processo de criação:
+Aqui tem um fluxograma explicando como foi meu processo de criação do front-end:
 
 <img width="1208" height="506" alt="image" src="https://github.com/user-attachments/assets/92ab30a3-9345-4efa-8486-20638d3037e8" />
 Esse fluxograma foi feito por mim no Obsidian, IA não foi utilizado.
