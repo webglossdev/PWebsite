@@ -1,9 +1,8 @@
 # PWebsite
 -
-Código do meu website, obviamente não é exatamente a mesma coisa que está no ar, eu removi informações sensiveis do código para publicar aqui, como: o webhook de contato, números de telefone, etc. Virou básicamente um template.
+Código do meu website, obviamente não é exatamente a mesma coisa que está no ar, eu removi informações sensiveis do código para publicar aqui, como: o webhook de contato, números de telefone, etc. Virou básicamente um template. (A versão online e a desse repo são diferentes, o repo está desatualizado e só sera atualizado mediante a conclusão do meu currículo e o website.)
 -
 Obrigado especial para a DevClub, o Aulão gratuito que fizeram de Front-end me ensinou muito.
-Se quiser pode sugerir melhorias ao website ou reportar bugs e alternativas melhores à funções implementadas com: Issues ou Pull Requests.
 -
 Base do código feito por IA (Gemini 3.1 Pro) e depois editado e continuado por mim, usando VS CODE inicialmente e depois fiz a troca para o Google Antigravity (Copilot não é muito bom mas tem pontos positivos). Self-Hosted em uma VPS da Oracle Cloud com Ubuntu 22.04, Nginx rodando o site, e Nginx Proxy Manager gerindo o Proxy.
 
