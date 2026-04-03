@@ -34,7 +34,7 @@
 
             <div class="hero-buttons">
                 <a href="projetos.html" class="btn-primary">Ver Projetos</a>
-                <a href="#" target="_blank" class="btn-secondary">Download CV</a>
+                <a href="#" id="download-cv-btn" class="btn-secondary">Download CV</a>
             </div>
         </header>
 
@@ -200,8 +200,43 @@
                         }
                     });
                 });
+
+                // ==========================================
+                // LÓGICA DO POPUP DE CURRÍCULO
+                // ==========================================
+                const cvBtn = document.getElementById('download-cv-btn');
+                const cvPopup = document.getElementById('cv-popup');
+                const closeCvBtn = document.getElementById('close-cv-popup');
+
+                if (cvBtn && cvPopup && closeCvBtn) {
+                    cvBtn.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        cvPopup.classList.remove('hidden');
+                    });
+                    
+                    closeCvBtn.addEventListener('click', () => {
+                        cvPopup.classList.add('hidden');
+                    });
+                }
             });
         </script>
+
+        <!-- Popup de Currículo -->
+        <div id="cv-popup" class="dev-popup hidden">
+            <div class="popup-content">
+                <h2 style="margin-bottom: 15px; font-size: 1.5rem; color: #fff;">Aviso sobre o Currículo</h2>
+                <p>Infelizmente o meu currículo não pode ser baixado diretamente do website, caso queira, me contate por e-mail ou pela página de contato e posso te mandar meu currículo caso for uma empresa legítima, startup ou algo relacionado.</p>
+                <div style="display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;">
+                    <a href="mailto:leonardopsoares2010@gmail.com" class="btn-primary" style="display: flex; align-items: center; gap: 8px;">
+                        📧 E-mail
+                    </a>
+                    <a href="contato.html" class="btn-primary" style="display: flex; align-items: center; gap: 8px;">
+                        📞 Contato
+                    </a>
+                </div>
+                <button id="close-cv-popup" class="btn-secondary" style="margin-top: 25px; width: 100%;">Fechar</button>
+            </div>
+        </div>
 </body>
 
 </html>
