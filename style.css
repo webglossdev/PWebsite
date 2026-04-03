@@ -2172,12 +2172,10 @@ textarea.glass-input {
     flex-wrap: wrap;
     gap: 10px;
     margin-bottom: 25px;
-    background: rgba(255, 255, 255, 0.03);
-    padding: 10px;
-    border-radius: 16px;
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    backdrop-filter: blur(10px);
-    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    background: #0d1117;
+    padding: 12px;
+    border-radius: 6px;
+    border: 1px solid #30363d;
     min-height: 44px;
 }
 
@@ -2185,22 +2183,19 @@ textarea.glass-input {
     display: flex;
     align-items: center;
     gap: 8px;
-    background: rgba(0, 162, 255, 0.05);
+    background: #0d1117;
     padding: 6px 14px;
-    border-radius: 10px;
+    border-radius: 4px;
     font-size: 0.82rem;
-    color: #c8d8ea;
-    border: 1px solid rgba(0, 162, 255, 0.1);
-    transition: all 0.3s ease;
-    cursor: help;
+    color: #c9d1d9;
+    border: 1px solid #30363d;
+    transition: background-color 0.2s ease, border-color 0.2s ease;
+    cursor: default;
 }
 
 .stat-item:hover {
-    background: rgba(0, 162, 255, 0.12);
-    border-color: rgba(0, 162, 255, 0.4);
-    transform: translateY(-3px) scale(1.02);
-    color: #fff;
-    box-shadow: 0 5px 15px rgba(0, 162, 255, 0.2);
+    background: #161b22;
+    border-color: #8b949e;
 }
 
 /* Skeleton Loading State */
