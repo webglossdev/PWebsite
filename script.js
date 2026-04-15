@@ -1,42 +1,176 @@
-// Detecta se o dispositivo é mobile/touch para otimizar performance
-const isMobile = window.matchMedia('(max-width: 768px)').matches || navigator.maxTouchPoints > 0;
+// ==========================================
+// DARK MODE TOGGLE
+// ==========================================
+function initTheme() {
+    const toggle = document.getElementById('theme-toggle');
+    if (!toggle) return;
 
-if (document.getElementById('tsparticles') && !isMobile) {
+    // Check saved preference or system preference
+    const saved = localStorage.getItem('theme');
+    if (saved === 'dark') {
+        document.documentElement.classList.add('dark');
+        toggle.textContent = '☀️';
+    } else if (saved === 'light') {
+        document.documentElement.classList.add('light');
+        toggle.textContent = '🌙';
+    } else {
+        // Follow system preference
+        if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            document.documentElement.classList.add('dark');
+            toggle.textContent = '☀️';
+        } else {
+            toggle.textContent = '🌙';
+        }
+    }
+
+    toggle.addEventListener('click', () => {
+        const isDark = document.documentElement.classList.contains('dark');
+
+        if (isDark) {
+            document.documentElement.classList.remove('dark');
+            document.documentElement.classList.add('light');
+            localStorage.setItem('theme', 'light');
+            toggle.textContent = '🌙';
+        } else {
+            document.documentElement.classList.remove('light');
+            document.documentElement.classList.add('dark');
+            localStorage.setItem('theme', 'dark');
+            toggle.textContent = '☀️';
+        }
+    });
+
+    // Listen for system preference changes
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+        const saved = localStorage.getItem('theme');
+        if (!saved) {
+            // Only auto-switch if no manual preference set
+            if (e.matches) {
+                document.documentElement.classList.add('dark');
+                toggle.textContent = '☀️';
+            } else {
+                document.documentElement.classList.remove('dark');
+                toggle.textContent = '🌙';
+            }
+        }
+    });
+}
+
+// Initialize theme as early as possible
+initTheme();
+
+// ==========================================
+// PARTICLES TOGGLE (disabled by default)
+// ==========================================
+let particlesLoaded = false;
+let particlesActive = false;
+
+function initParticlesToggle() {
+    const toggle = document.getElementById('particles-toggle');
+    if (!toggle) return;
+
+    const isMobile = window.matchMedia('(max-width: 768px)').matches || navigator.maxTouchPoints > 0;
+
+    // Check saved preference (default: off)
+    const saved = localStorage.getItem('particles');
+    if (saved === 'true') {
+        enableParticles(toggle, isMobile);
+    }
+
+    toggle.addEventListener('click', () => {
+        if (particlesActive) {
+            disableParticles(toggle);
+        } else {
+            enableParticles(toggle, isMobile);
+        }
+    });
+}
+
+function enableParticles(toggleBtn, isMobile) {
+    document.body.classList.add('particles-enabled');
+    toggleBtn.classList.add('active');
+    localStorage.setItem('particles', 'true');
+    particlesActive = true;
+
+    // Dynamically load tsParticles if not loaded
+    if (!particlesLoaded && document.getElementById('tsparticles')) {
+        loadTsParticles(isMobile);
+    }
+}
+
+function disableParticles(toggleBtn) {
+    document.body.classList.remove('particles-enabled');
+    toggleBtn.classList.remove('active');
+    localStorage.setItem('particles', 'false');
+    particlesActive = false;
+
+    // Destroy existing particles instance
+    if (window.tsParticles) {
+        try {
+            window.tsParticles.domItem(0)?.destroy();
+        } catch (e) {
+            // Already destroyed or not initialized
+        }
+    }
+}
+
+function loadTsParticles(isMobile) {
+    const scripts = [
+        'https://cdn.jsdelivr.net/npm/tsparticles@2/tsparticles.bundle.min.js'
+    ];
+
+    let loaded = 0;
+    scripts.forEach(src => {
+        const script = document.createElement('script');
+        script.src = src;
+        script.onload = () => {
+            loaded++;
+            if (loaded === scripts.length) {
+                particlesLoaded = true;
+                initParticlesEffect(isMobile);
+            }
+        };
+        document.head.appendChild(script);
+    });
+}
+
+function initParticlesEffect(isMobile) {
+    if (!window.tsParticles || !document.getElementById('tsparticles')) return;
+
     tsParticles.load("tsparticles", {
-        fpsLimit: 120,
+        fpsLimit: 60,
         interactivity: {
             events: {
                 onHover: {
-                    enable: !isMobile, // Desabilita repulse no mobile para performance
+                    enable: !isMobile,
                     mode: "repulse"
                 },
                 resize: true
             },
             modes: {
                 repulse: {
-                    distance: 140, // Distância que o mouse começa a interagir
-                    duration: 9,   // Tempo (em segundos) para a estrela parar o movimento (inércia do líquido)
-                    factor: 10,     // Força BEM fraca (para não dar um soco na estrela)
-                    speed: 0.5,    // Deslizamento lento e suave
-                    easing: "ease-out-sine" // Curva elástica macia
+                    distance: 140,
+                    duration: 9,
+                    factor: 10,
+                    speed: 0.5,
+                    easing: "ease-out-sine"
                 }
             }
         },
         particles: {
-            color: { value: ["#ffd700", "#00a2ff", "#8a2be2", "#00ffcc"] },
+            color: { value: ["#60A5FA", "#818CF8", "#A78BFA", "#93C5FD"] },
             links: { enable: false },
             move: {
                 direction: "none",
                 enable: true,
                 outModes: { default: "out" },
                 random: true,
-                speed: { min: 0.2, max: 0.8 }, // Velocidade mais orgânica e variada
+                speed: { min: 0.15, max: 0.5 },
                 straight: false
             },
-            number: { density: { enable: true, area: 800 }, value: 45 },
+            number: { density: { enable: true, area: 800 }, value: isMobile ? 20 : 35 },
             opacity: {
-                value: { min: 0.3, max: 0.8 },
-                animation: { enable: true, speed: 0.5, minimumValue: 0.3, sync: false }
+                value: { min: 0.2, max: 0.6 },
+                animation: { enable: true, speed: 0.4, minimumValue: 0.2, sync: false }
             },
             shape: {
                 type: "image",
@@ -50,21 +184,24 @@ if (document.getElementById('tsparticles') && !isMobile) {
                 }
             },
             size: {
-                value: { min: 10, max: 18 },
-                animation: { enable: true, speed: 2, minimumValue: 10, sync: false } // Pulso de tamanho (Twinkle)
+                value: { min: 8, max: 14 },
+                animation: { enable: true, speed: 1.5, minimumValue: 8, sync: false }
             },
             rotate: {
                 value: { min: 0, max: 360 },
                 direction: "random",
-                animation: { enable: true, speed: 5, sync: false } // Rotação lenta e constante
+                animation: { enable: true, speed: 3, sync: false }
             }
         },
         detectRetina: true
     });
 }
 
+// Init particles toggle when DOM is ready
+document.addEventListener('DOMContentLoaded', initParticlesToggle);
+
 // ==========================================
-// LÓGICA PARA ESCONDER/MOSTRAR O CABEÇALHO
+// HEADER SCROLL HIDE/SHOW
 // ==========================================
 let lastScrollTop = 0;
 let isScrolling = false;
@@ -74,19 +211,15 @@ if (header) {
     window.addEventListener('scroll', function () {
         if (!isScrolling) {
             window.requestAnimationFrame(function () {
-                // Pega a posição atual da rolagem
                 let currentScroll = window.pageYOffset || document.documentElement.scrollTop;
 
-                // Se rolou para baixo e já passou de 100px do topo da página
                 if (currentScroll > lastScrollTop && currentScroll > 100) {
-                    header.classList.add('header-hidden'); // Esconde o cabeçalho
+                    header.classList.add('header-hidden');
                 } else {
-                    header.classList.remove('header-hidden'); // Mostra o cabeçalho
+                    header.classList.remove('header-hidden');
                 }
 
-                // Atualiza a última posição. (O <= 0 evita bugs se o usuário fizer scroll negativo no topo)
                 lastScrollTop = currentScroll <= 0 ? 0 : currentScroll;
-
                 isScrolling = false;
             });
             isScrolling = true;
@@ -95,10 +228,9 @@ if (header) {
 }
 
 // ==========================================
-// LÓGICA DO POPUP DE DESENVOLVIMENTO
+// DEV POPUP LOGIC (restored)
 // ==========================================
 document.addEventListener('DOMContentLoaded', () => {
-    // Timeout para garantir que o layout.js já injetou o HTML
     setTimeout(() => {
         const devPopup = document.getElementById('dev-popup');
         const closeBtn = document.getElementById('close-popup');
@@ -107,13 +239,13 @@ document.addEventListener('DOMContentLoaded', () => {
             let devPopupLoads = localStorage.getItem('dev_popup_loads');
             
             if (!devPopupLoads) {
-                // Primeira visita
+                // First visit
                 devPopup.classList.remove('hidden');
                 localStorage.setItem('dev_popup_loads', '1');
             } else {
                 let loads = parseInt(devPopupLoads, 10);
                 if (loads >= 3) {
-                    // A Cada 3 Recargas
+                    // Every 3 reloads
                     devPopup.classList.remove('hidden');
                     localStorage.setItem('dev_popup_loads', '1');
                 } else {
@@ -129,7 +261,7 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // ==========================================
-// LÓGICA DE ESTATÍSTICAS DO GITHUB (SENIOR VERSION)
+// GITHUB STATS (Preserved from original)
 // ==========================================
 function timeAgo(date) {
     const seconds = Math.floor((new Date() - new Date(date)) / 1000);
@@ -150,14 +282,13 @@ async function fetchGitHubStats() {
     const containers = document.querySelectorAll('.github-stats-container');
     if (containers.length === 0) return;
 
-    // Cache duration: 1 hour
-    const CACHE_TIME = 60 * 60 * 1000;
+    const CACHE_TIME = 60 * 60 * 1000; // 1 hour
 
     for (const container of containers) {
         const repo = container.getAttribute('data-repo');
         if (!repo) continue;
 
-        // Show Skeleton
+        // Show skeleton
         container.innerHTML = `
             <div class="stat-skeleton skeleton-sm"></div>
             <div class="stat-skeleton skeleton-md"></div>
@@ -175,7 +306,6 @@ async function fetchGitHubStats() {
                 }
             }
 
-            // Fetch Data
             const [repoRes, commitsRes] = await Promise.all([
                 fetch(`https://api.github.com/repos/${repo}`),
                 fetch(`https://api.github.com/repos/${repo}/commits?per_page=1`)
@@ -202,7 +332,6 @@ async function fetchGitHubStats() {
                 lastAuthor: commitsData[0]?.author?.login || commitsData[0]?.commit.author.name || '?'
             };
 
-            // Save to Cache
             localStorage.setItem(cacheKey, JSON.stringify({ data: stats, timestamp: Date.now() }));
             renderStats(container, stats);
 
@@ -235,4 +364,3 @@ function renderStats(container, data) {
 }
 
 document.addEventListener('DOMContentLoaded', fetchGitHubStats);
-

@@ -1,4 +1,8 @@
-// 1. Guarda o HTML do Fundo (Estrelas SVG + Aurora)
+// ==========================================
+// LAYOUT INJECTION — Clean Professional Version
+// ==========================================
+
+// Particles & Aurora background (hidden by default, toggled via JS)
 const backgroundHTML = `
     <div id="tsparticles"></div>
     <div class="vista-scene">
@@ -10,7 +14,7 @@ const backgroundHTML = `
     </div>
 `;
 
-// 2. Guarda o HTML do Cabeçalho
+// Header with dark mode toggle + particles toggle
 const headerHTML = `
     <nav class="floating-header">
         <div class="nav-links left-links">
@@ -19,17 +23,48 @@ const headerHTML = `
         </div>
         
         <div class="nav-logo">
-            <img src="logo.svg" alt="WebGlossDev Logo">
+            <a href="index.html">
+                <img src="logo.svg" alt="Leonardo P. Soares Logo">
+            </a>
         </div>
         
         <div class="nav-links right-links">
             <a href="sobre.html">Sobre Mim</a>
             <a href="contato.html">Contato</a>
         </div>
+
+        <div class="header-controls">
+            <button class="particles-toggle" id="particles-toggle" aria-label="Alternar partículas" title="Alternar efeito de partículas">
+                ✨
+            </button>
+            <button class="theme-toggle" id="theme-toggle" aria-label="Alternar tema" title="Alternar tema claro/escuro">
+                🌙
+            </button>
+        </div>
     </nav>
 `;
 
-// 3. Guarda o HTML do Rodapé e Créditos
+// Development notice banner
+const bannerHTML = `
+    <div class="dev-banner">
+        <div class="marquee">
+            <span>Aviso: Este site está em desenvolvimento. Algumas informações podem estar incompletas ou sujeitas a alterações. &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Aviso: Este site está em desenvolvimento. Algumas informações podem estar incompletas ou sujeitas a alterações.</span>
+        </div>
+    </div>
+`;
+
+// Development popup
+const popupHTML = `
+    <div id="dev-popup" class="dev-popup hidden">
+        <div class="popup-content">
+            <h2>Em Desenvolvimento</h2>
+            <p>Olá! Este site ainda está em construção e não está finalizado. Algumas informações podem estar faltando ou sofrerão alterações.</p>
+            <button id="close-popup" class="btn-primary" style="width: 100%; margin-top: 10px;">Entendi</button>
+        </div>
+    </div>
+`;
+
+// Footer
 const footerHTML = `
     <footer class="social-footer">
         <a href="https://linktr.ee/webglossdev" target="_blank" class="social-pill">
@@ -41,48 +76,23 @@ const footerHTML = `
     </footer>
 
     <div class="site-credits">
-        <!-- <p>Front-end feito com Gemini 3.1 Pro com edições minhas (Veja a página projetos)<br>
-        Back-end feito e mantido por mim no Oracle Cloud.</p> -->
         <p>Front-end feito com Gemini 3.1 Pro com edições minhas (Veja a página projetos)<br>
         Hospedado na Vercel com deploy automático via GitHub.</p>
-        <!-- <p>Conheça o movimento <a href="https://brazilianaccelerationism.com.br/" target="_blank" style="color: white;">Brazil Accelerationism</a>.</p> -->
-    </div>
-`;
-
-// ==========================================
-// INJEÇÃO AUTOMÁTICA NA PÁGINA
-// ==========================================
-
-const bannerHTML = `
-    <div class="dev-banner">
-        <div class="marquee">
-            <span>Aviso: Este site está em desenvolvimento. Algumas informações podem estar incompletas ou sujeitas a alterações. &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Aviso: Este site está em desenvolvimento. Algumas informações podem estar incompletas ou sujeitas a alterações.</span>
-        </div>
-    </div>
-`;
-
-const popupHTML = `
-    <div id="dev-popup" class="dev-popup hidden">
-        <div class="popup-content">
-            <h2 style="color: #00a2ff; margin-top: 0; font-size: 1.8rem; text-shadow: 0 0 10px rgba(0, 162, 255, 0.5);">Em Desenvolvimento</h2>
-            <p>Olá! Este site ainda está em construção e não está finalizado. Algumas informações podem estar faltando ou sofrerão alterações.</p>
-            <button id="close-popup" class="btn-primary" style="width: 100%; margin-top: 10px;">Entendi</button>
-        </div>
     </div>
 `;
 
 function injectLayout() {
-    // Injeta o Fundo, Cabeçalho, Banner e Popup logo no começo da tag <body>
+    // Inject background + banner + header + popup at beginning of body
     if (document.body) {
         document.body.insertAdjacentHTML('afterbegin', backgroundHTML + bannerHTML + headerHTML + popupHTML);
     }
 
-    // Injeta o Rodapé lá no finalzinho da div .content-wrapper
+    // Inject footer at end of .content-wrapper
     const contentWrapper = document.querySelector('.content-wrapper');
     if (contentWrapper) {
         contentWrapper.insertAdjacentHTML('beforeend', footerHTML);
     }
 }
 
-// Executa imediatamente (será chamado após o carregamento do script)
+// Execute immediately
 injectLayout();
