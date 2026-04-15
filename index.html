@@ -100,107 +100,12 @@
             </div>
         </section>
 
-        <script defer src="layout.js"></script>
-        <script defer src="script.js"></script>
-
-        <script>
-            document.addEventListener('DOMContentLoaded', () => {
-                // ==========================================
-                // SCROLL REVEAL ANIMATIONS
-                // ==========================================
-                const observerOptions = {
-                    root: null,
-                    rootMargin: '0px',
-                    threshold: 0.15
-                };
-
-                const appearanceObserver = new IntersectionObserver((entries, observer) => {
-                    let delayCounter = 0;
-                    entries.forEach(entry => {
-                        if (entry.isIntersecting) {
-                            const el = entry.target;
-                            if (!el.style.getPropertyValue('--pop-delay')) {
-                                el.style.setProperty('--pop-delay', `${delayCounter * 0.08}s`);
-                                delayCounter++;
-                            }
-                            el.classList.add('pop-visible');
-                            observer.unobserve(el);
-                        }
-                    });
-                }, observerOptions);
-
-                const animatables = document.querySelectorAll('.btn-primary, .btn-secondary, .stat-badge, .social-pill, .faq-item, .bubble-card');
-                animatables.forEach(el => appearanceObserver.observe(el));
-
-                // ==========================================
-                // FAQ ANIMATION (SLIDE DOWN)
-                // ==========================================
-                document.querySelectorAll('details.faq-item').forEach((details) => {
-                    const summary = details.querySelector('summary');
-                    const content = details.querySelector('.faq-content');
-
-                    summary.addEventListener('click', (e) => {
-                        e.preventDefault();
-
-                        if (details.open) {
-                            content.style.height = `${content.scrollHeight}px`;
-                            content.offsetHeight;
-                            content.style.height = '0px';
-                            content.style.paddingTop = '0px';
-                            content.style.paddingBottom = '0px';
-
-                            setTimeout(() => {
-                                details.removeAttribute('open');
-                                content.style = '';
-                            }, 300);
-                        } else {
-                            details.setAttribute('open', '');
-                            const targetHeight = content.scrollHeight;
-
-                            content.style.height = '0px';
-                            content.style.paddingTop = '0px';
-                            content.style.paddingBottom = '0px';
-                            content.style.overflow = 'hidden';
-
-                            content.offsetHeight;
-
-                            content.style.height = `${targetHeight}px`;
-                            content.style.paddingTop = '';
-                            content.style.paddingBottom = '';
-
-                            setTimeout(() => {
-                                content.style = '';
-                            }, 300);
-                        }
-                    });
-                });
-
-                // ==========================================
-                // CV POPUP
-                // ==========================================
-                const cvBtn = document.getElementById('download-cv-btn');
-                const cvPopup = document.getElementById('cv-popup');
-                const closeCvBtn = document.getElementById('close-cv-popup');
-
-                if (cvBtn && cvPopup && closeCvBtn) {
-                    cvBtn.addEventListener('click', (e) => {
-                        e.preventDefault();
-                        cvPopup.classList.remove('hidden');
-                    });
-                    
-                    closeCvBtn.addEventListener('click', () => {
-                        cvPopup.classList.add('hidden');
-                    });
-                }
-            });
-        </script>
-
         <!-- CV Popup -->
         <div id="cv-popup" class="dev-popup hidden">
             <div class="popup-content">
                 <h2>Aviso sobre o Currículo</h2>
                 <p>Infelizmente o meu currículo não pode ser baixado diretamente do website, caso queira, me contate por e-mail ou pela página de contato e posso te mandar meu currículo caso for uma empresa legítima, startup ou algo relacionado.</p>
-                <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
+                <div class="popup-actions">
                     <a href="mailto:leonardopsoares2010@gmail.com" class="btn-primary">
                         📧 E-mail
                     </a>
@@ -208,9 +113,12 @@
                         📞 Contato
                     </a>
                 </div>
-                <button id="close-cv-popup" class="btn-secondary" style="margin-top: 20px; width: 100;">Fechar</button>
+                <button id="close-cv-popup" class="btn-secondary popup-close" type="button">Fechar</button>
             </div>
         </div>
+
+        <script defer src="layout.js"></script>
+        <script defer src="script.js"></script>
 </body>
 
 </html>

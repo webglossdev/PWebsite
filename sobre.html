@@ -9,7 +9,6 @@
         content="Conheça Leonardo P. Soares — história, ferramentas, conquistas, setup e hobbies. Estudante autodidata de TI, competidor na ONIA e OBR, cursando Harvard CS50 e DevClub.">
     <link rel="icon" type="image/svg+xml" href="logo.svg">
     <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
 </head>
 
@@ -374,7 +373,7 @@
                             </div>
                         </a>
 
-                        <a href="https://linktr.ee/webglossdev_href">
+                        <a href="https://aulas.devclub.com.br/">
                             <div class="active-goal-card">
                                 <span class="goal-icon"><img src="https://aulas.devclub.com.br/assets/logo-6EGyML0K.png"
                                         width="30px" alt="D"></span>
@@ -403,28 +402,18 @@
                         </a>
                     </div>
 
-                    <p style="font-size:0.85rem; color: var(--text-muted); margin-bottom: 12px;">Clique numa pasta para ver os
-                        certificados</p>
+                    <p style="font-size:0.85rem; color: var(--text-muted); margin-bottom: 12px;">Clique numa pasta para ver os certificados</p>
                     <div class="folder-system">
                         <div class="folder-tabs">
-                            <div class="folder-tab active" data-panel="panel-devclub">
-                                <i class="fas fa-folder tab-icon"></i> DevClub
-                            </div>
-                            <div class="folder-tab" data-panel="panel-onia">
-                                <i class="fas fa-folder tab-icon"></i> ONIA
-                            </div>
-                            <div class="folder-tab" data-panel="panel-bradesco">
-                                <i class="fas fa-folder tab-icon"></i> Bradesco
-                            </div>
-                            <div class="folder-tab" data-panel="panel-obr">
-                                <i class="fas fa-folder tab-icon"></i> OBR
-                            </div>
+                            <div class="folder-tab active" data-panel="panel-devclub">📁 DevClub</div>
+                            <div class="folder-tab" data-panel="panel-onia">📁 ONIA</div>
+                            <div class="folder-tab" data-panel="panel-bradesco">📁 Bradesco</div>
+                            <div class="folder-tab" data-panel="panel-obr">📁 OBR</div>
                         </div>
 
                         <div id="panel-devclub" class="folder-panel active">
                             <div class="cert-grid">
-                                <div class="cert-card"
-                                    onclick="openLightbox('DEVCLUBC.png', 'Missão Programação com IA do Zero', 'Concluído via DevClub - 03/2026')">
+                                <div class="cert-card" onclick="openLightbox('DEVCLUBC.png', 'Missão Programação com IA do Zero', 'Concluído via DevClub - 03/2026')">
                                     <img src="DEVCLUBC.png" alt="Certif. DevClub" loading="lazy">
                                     <div class="cert-card-info">
                                         <h4>Missão Programação com IA</h4>
@@ -434,40 +423,17 @@
                             </div>
                         </div>
 
-                        <div id="panel-bradesco" class="folder-panel">
-                            <div class="cert-grid">
-                                <div class="cert-card"
-                                    onclick="openLightbox('BPOO.png', 'POO', 'Concluído via Bradesco - 11/2025')">
-                                    <img src="BPOO.png" alt="Certif. Intro" loading="lazy">
-                                    <div class="cert-card-info">
-                                        <h4>Programação Orientada a Objetos</h4>
-                                        <p>Bradesco &middot; 11/2025</p>
-                                    </div>
-                                </div>
-                                <div class="cert-card"
-                                    onclick="openLightbox('FTI.png', 'Fundamentos de TI', 'Concluído via Bradesco - 11/2025')">
-                                    <img src="FTI.png" alt="Certif. Intro" loading="lazy">
-                                    <div class="cert-card-info">
-                                        <h4>Fundamentos de TI</h4>
-                                        <p>Bradesco &middot; 11/2025</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
                         <div id="panel-onia" class="folder-panel">
                             <div class="cert-grid">
-                                <div class="cert-card"
-                                    onclick="openLightbox('ONIAP1.png', 'ONIAP1', 'Concluído via Olímpico - 11/2025')">
-                                    <img src="ONIAP1.png" alt="Certif. Intro" loading="lazy">
+                                <div class="cert-card" onclick="openLightbox('ONIAP1.png', 'ONIAP1', 'Concluído via Olímpico - 11/2025')">
+                                    <img src="ONIAP1.png" alt="Certif. ONIA 1" loading="lazy">
                                     <div class="cert-card-info">
                                         <h4>Participação na ONIA 2 | 1a Fase</h4>
                                         <p>Olímpico &middot; 11/2025</p>
                                     </div>
                                 </div>
-                                <div class="cert-card"
-                                    onclick="openLightbox('ONIAP2.png', 'ONIAP2', 'Concluído via Olímpico - 12/2025')">
-                                    <img src="ONIAP2.png" alt="Certif. Intro" loading="lazy">
+                                <div class="cert-card" onclick="openLightbox('ONIAP2.png', 'ONIAP2', 'Concluído via Olímpico - 12/2025')">
+                                    <img src="ONIAP2.png" alt="Certif. ONIA 2" loading="lazy">
                                     <div class="cert-card-info">
                                         <h4>Participação na ONIA 2 | 2a Fase</h4>
                                         <p>Olímpico &middot; 12/2025</p>
@@ -476,35 +442,50 @@
                             </div>
                         </div>
 
+                        <div id="panel-bradesco" class="folder-panel">
+                            <div class="cert-grid">
+                                <div class="cert-card" onclick="openLightbox('BPOO.png', 'POO', 'Concluído via Bradesco - 11/2025')">
+                                    <img src="BPOO.png" alt="Certif. POO" loading="lazy">
+                                    <div class="cert-card-info">
+                                        <h4>Programação Orientada a Objetos</h4>
+                                        <p>Bradesco &middot; 11/2025</p>
+                                    </div>
+                                </div>
+                                <div class="cert-card" onclick="openLightbox('FTI.png', 'Fundamentos de TI', 'Concluído via Bradesco - 11/2025')">
+                                    <img src="FTI.png" alt="Certif. FTI" loading="lazy">
+                                    <div class="cert-card-info">
+                                        <h4>Fundamentos de TI</h4>
+                                        <p>Bradesco &middot; 11/2025</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                         <div id="panel-obr" class="folder-panel">
                             <div class="cert-grid">
-                                <div class="cert-card"
-                                    onclick="openLightbox('REG-P.png', 'REG-P', 'Concluído em Maricá - 2024')">
-                                    <img src="REG-P.png" alt="Certif. Intro" loading="lazy">
+                                <div class="cert-card" onclick="openLightbox('REG-P.png', 'REG-P', 'Concluído em Maricá - 2024')">
+                                    <img src="REG-P.png" alt="Certif. OBR Regional" loading="lazy">
                                     <div class="cert-card-info">
                                         <h4>Participação na OBR 2024 | 1a Fase, Regional</h4>
                                         <p>OBR &middot; 2024</p>
                                     </div>
                                 </div>
-                                <div class="cert-card"
-                                    onclick="openLightbox('EST-P.png', 'EST-P', 'Concluído em Maricá - 2024')">
-                                    <img src="EST-P.png" alt="Certif. Intro" loading="lazy">
+                                <div class="cert-card" onclick="openLightbox('EST-P.png', 'EST-P', 'Concluído em Maricá - 2024')">
+                                    <img src="EST-P.png" alt="Certif. OBR Estadual" loading="lazy">
                                     <div class="cert-card-info">
                                         <h4>Participação na OBR 2024 | 2a Fase, Estadual</h4>
                                         <p>OBR &middot; 2024</p>
                                     </div>
                                 </div>
-                                <div class="cert-card"
-                                    onclick="openLightbox('OURODESIGN-EST.png', 'OURODESIGN-EST', 'Concluído em Maricá - 2024')">
-                                    <img src="OURODESIGN-EST.png" alt="Certif. Intro" loading="lazy">
+                                <div class="cert-card" onclick="openLightbox('OURODESIGN-EST.png', 'OURODESIGN-EST', 'Concluído em Maricá - 2024')">
+                                    <img src="OURODESIGN-EST.png" alt="Certif. Melhor Design" loading="lazy">
                                     <div class="cert-card-info">
                                         <h4>Medalha de Melhor Design na OBR 2024 Estadual</h4>
                                         <p>OBR &middot; 2024</p>
                                     </div>
                                 </div>
-                                <div class="cert-card"
-                                    onclick="openLightbox('TEO3-P.png', 'TEO3-P', 'Concluído em 2024')">
-                                    <img src="TEO3-P.png" alt="Certif. Intro" loading="lazy">
+                                <div class="cert-card" onclick="openLightbox('TEO3-P.png', 'TEO3-P', 'Concluído em 2024')">
+                                    <img src="TEO3-P.png" alt="Certif. OBR Teórica" loading="lazy">
                                     <div class="cert-card-info">
                                         <h4>Participação na OBR 2024 | Teórica N3</h4>
                                         <p>OBR &middot; 2024</p>
@@ -518,152 +499,23 @@
                 <article id="setup" class="tab-content">
                     <h2>Minha Workstation (Atual)</h2>
                     <ul>
-                        <li><strong>Gabinete:</strong>Aerocool XPredator XL-ATX Evil Green</li>
+                        <li><strong>Gabinete:</strong> Aerocool XPredator XL-ATX Evil Green</li>
                         <li><strong>Processador:</strong> Ryzen 7 5700G (Underclock e Undervolt)</li>
-                        <li><strong>Cooler:</strong>Noctua NH-D15 chromax.black</li>
+                        <li><strong>Cooler:</strong> Noctua NH-D15 chromax.black</li>
                         <li><strong>Placa de Vídeo:</strong> APU Vega 11</li>
                         <li><strong>Placa Mãe:</strong> Asrock B450M HDV R4.0</li>
                         <li><strong>Memória:</strong> DDR4 24GB 3666mhz CL20 (Overclocked)</li>
-                        <li><strong>Armazenamento:</strong> SSDs 480GB m.2 + 900GB sata , HDDs 1.5TB Seagate + 2TB
-                            Seagate</li>
-                        <li><strong>Fonte:</strong>Aerocool VX-600</li>
+                        <li><strong>Armazenamento:</strong> SSDs 480GB m.2 + 900GB sata, HDDs 1.5TB Seagate + 2TB Seagate</li>
+                        <li><strong>Fonte:</strong> Aerocool VX-600</li>
                         <li><strong>OS Principal:</strong> Windows 11 IoT Enterprise LTSC 24H2</li>
                     </ul>
-                    <p style="margin-top: 20px;">Estou planejando meu próximo upgrade para conseguir rodar LLMs pesados
-                        e meus
-                        projetos localmente 24/7.</p>
+                    <p style="margin-top: 20px;">Estou planejando meu próximo upgrade para conseguir rodar LLMs pesados e meus projetos localmente 24/7.</p>
                 </article>
-
             </div>
         </div>
     </div>
 
-    <script defer src="layout.js"></script>
-    <script defer src="script.js"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            // ==========================================
-            // LÓGICA DAS ABAS (FADE-OUT / FADE-IN)
-            // ==========================================
-            const tabButtons = document.querySelectorAll('.tab-btn');
-            const tabContents = document.querySelectorAll('.tab-content');
-            let isAnimating = false; // Trava para o usuário não bugar a animação clicando rápido demais
-
-            tabButtons.forEach(button => {
-                button.addEventListener('click', () => {
-                    if (isAnimating || button.classList.contains('active')) return;
-                    isAnimating = true;
-
-                    const targetId = button.getAttribute('data-tab');
-                    const currentTab = document.querySelector('.tab-content.active');
-                    const nextTab = document.getElementById(targetId);
-
-                    // Troca a cor dos botões imediatamente
-                    document.querySelector('.tab-btn.active').classList.remove('active');
-                    button.classList.add('active');
-
-                    // Inicia o Fade Out do conteúdo atual
-                    currentTab.classList.add('fading-out');
-
-                    // Espera os 300ms do CSS terminar para trocar o display
-                    setTimeout(() => {
-                        currentTab.classList.remove('active', 'fading-out'); // Tira o velho
-                        nextTab.classList.add('active'); // O novo ganha display:block e toca o fadeIn nativamente
-
-                        // Re-aplica visibilidade nas bolhas e cards da nova aba
-                        const animatableElements = nextTab.querySelectorAll('.stack-bubble, .bubble-card, .cert-slide');
-                        animatableElements.forEach((el, index) => {
-                            el.style.animation = 'none';
-                            el.offsetHeight; /* trigger reflow */
-                            el.style.animation = null;
-                        });
-
-                        isAnimating = false; // Libera novos cliques
-                    }, 300);
-                });
-            });
-
-            // ==========================================
-            // LÓGICA DE STAGGERED ANIMATIONS E OBSERVADOR
-            // ==========================================
-            const observerOptions = {
-                root: null,
-                rootMargin: '0px',
-                threshold: 0.2
-            };
-
-            const appearanceObserver = new IntersectionObserver((entries, observer) => {
-                let delayCounter = 0;
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        const el = entry.target;
-                        // Se o elemento não tem '--pop-delay' setado, calcula um delay dinâmico
-                        if (!el.style.getPropertyValue('--pop-delay')) {
-                            el.style.setProperty('--pop-delay', `${delayCounter * 0.15}s`);
-                            delayCounter++;
-                        }
-                        el.classList.add('pop-visible');
-                        observer.unobserve(el); // Para de observar depois que apareceu
-                    }
-                });
-            }, observerOptions);
-
-            document.querySelectorAll('.btn-primary, .btn-secondary, .stat-badge, .social-pill, .faq-item, .bubble-card, .stack-bubble, .cert-slide, .tab-btn, .tab-content, .glass-card').forEach((el) => {
-                appearanceObserver.observe(el);
-            });
-
-            // ==========================================
-            // LÓGICA DO CARROSSEL DE HOBBIES
-            // ==========================================
-            const slides = document.querySelectorAll('.hobby-slide');
-            const btnNext = document.getElementById('next-hobby');
-            const btnPrev = document.getElementById('prev-hobby');
-            const counterText = document.getElementById('hobby-counter');
-            let currentSlide = 0;
-
-            function updateCarousel() {
-                slides.forEach(slide => slide.classList.remove('active'));
-                slides[currentSlide].classList.add('active');
-                counterText.innerText = `${currentSlide + 1} / ${slides.length}`;
-            }
-
-            btnNext.addEventListener('click', () => {
-                currentSlide = (currentSlide + 1) % slides.length; // Volta pro início se passar do último
-                updateCarousel();
-            });
-
-            btnPrev.addEventListener('click', () => {
-                currentSlide = (currentSlide - 1 + slides.length) % slides.length; // Vai pro último se voltar do primeiro
-                updateCarousel();
-            });
-
-            // ==========================================
-            // LÓGICA DAS ABAS DAS PASTAS (CERTIFICADOS)
-            // ==========================================
-            const folderTabs = document.querySelectorAll('.folder-tab');
-            folderTabs.forEach(tab => {
-                tab.addEventListener('click', () => {
-                    folderTabs.forEach(t => t.classList.remove('active'));
-                    document.querySelectorAll('.folder-panel').forEach(p => p.classList.remove('active'));
-                    tab.classList.add('active');
-                    const target = document.getElementById(tab.dataset.panel);
-                    if (target) target.classList.add('active');
-                });
-            });
-        });
-        // Lightbox para ver certificado ampliado
-        function openLightbox(src, title, desc) {
-            document.getElementById('lb-img').src = src;
-            document.getElementById('lb-title').innerText = title;
-            document.getElementById('lb-desc').innerText = desc;
-            document.getElementById('cert-lightbox').classList.add('open');
-        }
-        function closeLightbox() {
-            document.getElementById('cert-lightbox').classList.remove('open');
-        }
-    </script>
-
-    <div id="cert-lightbox" onclick="if(event.target===this) closeLightbox()">
+    <div id="cert-lightbox" class="lightbox-shell">
         <div class="lightbox-content">
             <button class="lightbox-close" onclick="closeLightbox()">&#x2715;</button>
             <img id="lb-img" src="" alt="Certificado">
@@ -673,6 +525,9 @@
             </div>
         </div>
     </div>
+
+    <script defer src="layout.js"></script>
+    <script defer src="script.js"></script>
 
 </body>
 

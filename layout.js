@@ -44,15 +44,6 @@ const headerHTML = `
     </nav>
 `;
 
-// Development notice banner
-const bannerHTML = `
-    <div class="dev-banner">
-        <div class="marquee">
-            <span>Aviso: Este site está em desenvolvimento. Algumas informações podem estar incompletas ou sujeitas a alterações. &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Aviso: Este site está em desenvolvimento. Algumas informações podem estar incompletas ou sujeitas a alterações.</span>
-        </div>
-    </div>
-`;
-
 // Development popup
 const popupHTML = `
     <div id="dev-popup" class="dev-popup hidden">
@@ -67,7 +58,7 @@ const popupHTML = `
 // Footer
 const footerHTML = `
     <footer class="social-footer">
-        <a href="https://linktr.ee/webglossdev" target="_blank" class="social-pill">
+        <a href="https://linktr.ee/webglossdev" target="_blank" rel="noopener noreferrer" class="social-pill">
             <span class="icon">🔗</span> Linktree
         </a>
         <a href="mailto:webglossdev@proton.me" class="social-pill">
@@ -76,15 +67,15 @@ const footerHTML = `
     </footer>
 
     <div class="site-credits">
-        <p>Front-end feito com Gemini 3.1 Pro com edições minhas (Veja a página projetos)<br>
+        <p>Front-end desenvolvido com apoio de IA e ajustes manuais.<br>
         Hospedado na Vercel com deploy automático via GitHub.</p>
     </div>
 `;
 
 function injectLayout() {
-    // Inject background + banner + header + popup at beginning of body
+    // Inject background + header + popup at beginning of body
     if (document.body) {
-        document.body.insertAdjacentHTML('afterbegin', backgroundHTML + bannerHTML + headerHTML + popupHTML);
+        document.body.insertAdjacentHTML('afterbegin', backgroundHTML + headerHTML + popupHTML);
     }
 
     // Inject footer at end of .content-wrapper

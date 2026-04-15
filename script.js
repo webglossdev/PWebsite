@@ -1,366 +1,653 @@
-// ==========================================
-// DARK MODE TOGGLE
-// ==========================================
-function initTheme() {
-    const toggle = document.getElementById('theme-toggle');
-    if (!toggle) return;
+(() => {
+    const reducedMotionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const isReducedMotion = () => reducedMotionQuery.matches;
+    const revealSelector = '.btn-primary, .btn-secondary, .stat-badge, .social-pill, .faq-item, .bubble-card, .project-card, .future-card, .glass-card, .stack-bubble, .cert-card, .tab-btn, .version-tab, .active-goal-card';
 
-    // Check saved preference or system preference
-    const saved = localStorage.getItem('theme');
-    if (saved === 'dark') {
-        document.documentElement.classList.add('dark');
-        toggle.textContent = '☀️';
-    } else if (saved === 'light') {
-        document.documentElement.classList.add('light');
-        toggle.textContent = '🌙';
-    } else {
-        // Follow system preference
-        if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
-            document.documentElement.classList.add('dark');
-            toggle.textContent = '☀️';
-        } else {
-            toggle.textContent = '🌙';
+    let particlesLoaded = false;
+    let particlesActive = false;
+    let revealObserver = null;
+    let lastScrollTop = 0;
+    let scrollQueued = false;
+
+    function applyTheme(theme) {
+        document.documentElement.classList.remove('dark', 'light');
+        if (theme === 'dark' || theme === 'light') {
+            document.documentElement.classList.add(theme);
+        }
+
+        const themeToggle = document.getElementById('theme-toggle');
+        if (themeToggle) {
+            const isDark = theme === 'dark' || (!theme && window.matchMedia('(prefers-color-scheme: dark)').matches);
+            themeToggle.textContent = isDark ? '☀️' : '🌙';
+            themeToggle.setAttribute('aria-pressed', isDark ? 'true' : 'false');
         }
     }
 
-    toggle.addEventListener('click', () => {
-        const isDark = document.documentElement.classList.contains('dark');
+    function initTheme() {
+        const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+        const savedTheme = localStorage.getItem('theme');
+        const initialTheme = savedTheme || (mediaQuery.matches ? 'dark' : 'light');
+        applyTheme(initialTheme);
 
-        if (isDark) {
-            document.documentElement.classList.remove('dark');
-            document.documentElement.classList.add('light');
-            localStorage.setItem('theme', 'light');
-            toggle.textContent = '🌙';
-        } else {
-            document.documentElement.classList.remove('light');
-            document.documentElement.classList.add('dark');
-            localStorage.setItem('theme', 'dark');
-            toggle.textContent = '☀️';
-        }
-    });
+        const themeToggle = document.getElementById('theme-toggle');
+        if (!themeToggle) return;
 
-    // Listen for system preference changes
-    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
-        const saved = localStorage.getItem('theme');
-        if (!saved) {
-            // Only auto-switch if no manual preference set
-            if (e.matches) {
-                document.documentElement.classList.add('dark');
-                toggle.textContent = '☀️';
-            } else {
-                document.documentElement.classList.remove('dark');
-                toggle.textContent = '🌙';
-            }
-        }
-    });
-}
+        themeToggle.addEventListener('click', () => {
+            const nextTheme = document.documentElement.classList.contains('dark') ? 'light' : 'dark';
+            localStorage.setItem('theme', nextTheme);
+            applyTheme(nextTheme);
+        });
 
-// Initialize theme as early as possible
-initTheme();
-
-// ==========================================
-// PARTICLES TOGGLE (disabled by default)
-// ==========================================
-let particlesLoaded = false;
-let particlesActive = false;
-
-function initParticlesToggle() {
-    const toggle = document.getElementById('particles-toggle');
-    if (!toggle) return;
-
-    const isMobile = window.matchMedia('(max-width: 768px)').matches || navigator.maxTouchPoints > 0;
-
-    // Check saved preference (default: off)
-    const saved = localStorage.getItem('particles');
-    if (saved === 'true') {
-        enableParticles(toggle, isMobile);
-    }
-
-    toggle.addEventListener('click', () => {
-        if (particlesActive) {
-            disableParticles(toggle);
-        } else {
-            enableParticles(toggle, isMobile);
-        }
-    });
-}
-
-function enableParticles(toggleBtn, isMobile) {
-    document.body.classList.add('particles-enabled');
-    toggleBtn.classList.add('active');
-    localStorage.setItem('particles', 'true');
-    particlesActive = true;
-
-    // Dynamically load tsParticles if not loaded
-    if (!particlesLoaded && document.getElementById('tsparticles')) {
-        loadTsParticles(isMobile);
-    }
-}
-
-function disableParticles(toggleBtn) {
-    document.body.classList.remove('particles-enabled');
-    toggleBtn.classList.remove('active');
-    localStorage.setItem('particles', 'false');
-    particlesActive = false;
-
-    // Destroy existing particles instance
-    if (window.tsParticles) {
-        try {
-            window.tsParticles.domItem(0)?.destroy();
-        } catch (e) {
-            // Already destroyed or not initialized
-        }
-    }
-}
-
-function loadTsParticles(isMobile) {
-    const scripts = [
-        'https://cdn.jsdelivr.net/npm/tsparticles@2/tsparticles.bundle.min.js'
-    ];
-
-    let loaded = 0;
-    scripts.forEach(src => {
-        const script = document.createElement('script');
-        script.src = src;
-        script.onload = () => {
-            loaded++;
-            if (loaded === scripts.length) {
-                particlesLoaded = true;
-                initParticlesEffect(isMobile);
+        const syncSystemTheme = (event) => {
+            if (!localStorage.getItem('theme')) {
+                applyTheme(event.matches ? 'dark' : 'light');
             }
         };
-        document.head.appendChild(script);
-    });
-}
 
-function initParticlesEffect(isMobile) {
-    if (!window.tsParticles || !document.getElementById('tsparticles')) return;
+        if (mediaQuery.addEventListener) {
+            mediaQuery.addEventListener('change', syncSystemTheme);
+        } else if (mediaQuery.addListener) {
+            mediaQuery.addListener(syncSystemTheme);
+        }
+    }
 
-    tsParticles.load("tsparticles", {
-        fpsLimit: 60,
-        interactivity: {
-            events: {
-                onHover: {
-                    enable: !isMobile,
-                    mode: "repulse"
-                },
-                resize: true
-            },
-            modes: {
-                repulse: {
-                    distance: 140,
-                    duration: 9,
-                    factor: 10,
-                    speed: 0.5,
-                    easing: "ease-out-sine"
-                }
+    function initParticlesToggle() {
+        const toggle = document.getElementById('particles-toggle');
+        if (!toggle) return;
+
+        const isMobile = window.matchMedia('(max-width: 768px)').matches || navigator.maxTouchPoints > 0;
+        const savedPreference = localStorage.getItem('particles') === 'true';
+
+        toggle.setAttribute('aria-pressed', savedPreference ? 'true' : 'false');
+
+        if (savedPreference) {
+            enableParticles(toggle, isMobile);
+        }
+
+        toggle.addEventListener('click', () => {
+            if (particlesActive) {
+                disableParticles(toggle);
+            } else {
+                enableParticles(toggle, isMobile);
             }
-        },
-        particles: {
-            color: { value: ["#60A5FA", "#818CF8", "#A78BFA", "#93C5FD"] },
-            links: { enable: false },
-            move: {
-                direction: "none",
-                enable: true,
-                outModes: { default: "out" },
-                random: true,
-                speed: { min: 0.15, max: 0.5 },
-                straight: false
-            },
-            number: { density: { enable: true, area: 800 }, value: isMobile ? 20 : 35 },
-            opacity: {
-                value: { min: 0.2, max: 0.6 },
-                animation: { enable: true, speed: 0.4, minimumValue: 0.2, sync: false }
-            },
-            shape: {
-                type: "image",
-                options: {
-                    image: {
-                        src: "estrelas.svg",
-                        width: 32,
-                        height: 32,
-                        replaceColor: false
+        });
+    }
+
+    function enableParticles(toggleBtn, isMobile) {
+        const particleLayer = document.getElementById('tsparticles');
+        if (!toggleBtn || !particleLayer) return;
+
+        document.body.classList.add('particles-enabled');
+        toggleBtn.classList.add('active');
+        toggleBtn.setAttribute('aria-pressed', 'true');
+        localStorage.setItem('particles', 'true');
+        particlesActive = true;
+
+        if (!particlesLoaded) {
+            loadTsParticles(isMobile);
+            return;
+        }
+
+        initParticlesEffect(isMobile);
+    }
+
+    function disableParticles(toggleBtn) {
+        document.body.classList.remove('particles-enabled');
+        toggleBtn.classList.remove('active');
+        toggleBtn.setAttribute('aria-pressed', 'false');
+        localStorage.setItem('particles', 'false');
+        particlesActive = false;
+
+        if (window.tsParticles) {
+            try {
+                window.tsParticles.domItem(0)?.destroy();
+            } catch (error) {
+                // Ignore teardown errors when the animation is already gone.
+            }
+        }
+    }
+
+    function loadTsParticles(isMobile) {
+        if (document.querySelector('script[data-tsparticles-loader]')) {
+            return;
+        }
+
+        const script = document.createElement('script');
+        script.src = 'https://cdn.jsdelivr.net/npm/tsparticles@2/tsparticles.bundle.min.js';
+        script.async = true;
+        script.dataset.tsparticlesLoader = 'true';
+        script.onload = () => {
+            particlesLoaded = true;
+            initParticlesEffect(isMobile);
+        };
+        document.head.appendChild(script);
+    }
+
+    function initParticlesEffect(isMobile) {
+        if (!window.tsParticles || !document.getElementById('tsparticles')) return;
+
+        window.tsParticles.load('tsparticles', {
+            fpsLimit: 60,
+            interactivity: {
+                events: {
+                    onHover: {
+                        enable: !isMobile,
+                        mode: 'repulse'
+                    },
+                    resize: true
+                },
+                modes: {
+                    repulse: {
+                        distance: 140,
+                        duration: 9,
+                        factor: 10,
+                        speed: 0.5,
+                        easing: 'ease-out-sine'
                     }
                 }
             },
-            size: {
-                value: { min: 8, max: 14 },
-                animation: { enable: true, speed: 1.5, minimumValue: 8, sync: false }
+            particles: {
+                color: { value: ['#6DD6FF', '#8B9CF6', '#A7F3D0', '#E2E8F0'] },
+                links: { enable: false },
+                move: {
+                    direction: 'none',
+                    enable: true,
+                    outModes: { default: 'out' },
+                    random: true,
+                    speed: { min: 0.12, max: 0.42 },
+                    straight: false
+                },
+                number: { density: { enable: true, area: 800 }, value: isMobile ? 16 : 28 },
+                opacity: {
+                    value: { min: 0.18, max: 0.5 },
+                    animation: { enable: true, speed: 0.35, minimumValue: 0.18, sync: false }
+                },
+                shape: {
+                    type: 'image',
+                    options: {
+                        image: {
+                            src: 'estrelas.svg',
+                            width: 32,
+                            height: 32,
+                            replaceColor: false
+                        }
+                    }
+                },
+                size: {
+                    value: { min: 8, max: 14 },
+                    animation: { enable: true, speed: 1.2, minimumValue: 8, sync: false }
+                },
+                rotate: {
+                    value: { min: 0, max: 360 },
+                    direction: 'random',
+                    animation: { enable: true, speed: 2.5, sync: false }
+                }
             },
-            rotate: {
-                value: { min: 0, max: 360 },
-                direction: "random",
-                animation: { enable: true, speed: 3, sync: false }
-            }
-        },
-        detectRetina: true
-    });
-}
+            detectRetina: true
+        });
+    }
 
-// Init particles toggle when DOM is ready
-document.addEventListener('DOMContentLoaded', initParticlesToggle);
+    function ensureRevealObserver() {
+        if (revealObserver || !('IntersectionObserver' in window)) {
+            return revealObserver;
+        }
 
-// ==========================================
-// HEADER SCROLL HIDE/SHOW
-// ==========================================
-let lastScrollTop = 0;
-let isScrolling = false;
-const header = document.querySelector('.floating-header');
+        revealObserver = new IntersectionObserver((entries, observer) => {
+            let delayCounter = 0;
 
-if (header) {
-    window.addEventListener('scroll', function () {
-        if (!isScrolling) {
-            window.requestAnimationFrame(function () {
-                let currentScroll = window.pageYOffset || document.documentElement.scrollTop;
+            entries.forEach((entry) => {
+                if (!entry.isIntersecting) return;
 
-                if (currentScroll > lastScrollTop && currentScroll > 100) {
-                    header.classList.add('header-hidden');
-                } else {
-                    header.classList.remove('header-hidden');
+                const element = entry.target;
+                if (!element.style.getPropertyValue('--pop-delay')) {
+                    element.style.setProperty('--pop-delay', `${delayCounter * 0.08}s`);
                 }
 
-                lastScrollTop = currentScroll <= 0 ? 0 : currentScroll;
-                isScrolling = false;
+                element.classList.add('pop-visible');
+                observer.unobserve(element);
+                delayCounter += 1;
             });
-            isScrolling = true;
-        }
-    }, { passive: true });
-}
+        }, {
+            root: null,
+            rootMargin: '0px 0px -8% 0px',
+            threshold: 0.15
+        });
 
-// ==========================================
-// DEV POPUP LOGIC (restored)
-// ==========================================
-document.addEventListener('DOMContentLoaded', () => {
-    setTimeout(() => {
+        return revealObserver;
+    }
+
+    function revealTargets(targets) {
+        if (!targets || targets.length === 0) return;
+
+        if (isReducedMotion() || !('IntersectionObserver' in window)) {
+            targets.forEach((element) => element.classList.add('pop-visible'));
+            return;
+        }
+
+        const observer = ensureRevealObserver();
+        targets.forEach((element) => {
+            if (element && !element.classList.contains('pop-visible')) {
+                observer.observe(element);
+            }
+        });
+    }
+
+    function initSharedReveal() {
+        revealTargets(Array.from(document.querySelectorAll(revealSelector)));
+    }
+
+    function animateFaqContent(details, shouldOpen) {
+        const content = details.querySelector('.faq-content');
+        if (!content) return;
+
+        if (isReducedMotion()) {
+            details.open = shouldOpen;
+            return;
+        }
+
+        if (shouldOpen) {
+            details.setAttribute('open', '');
+            content.style.overflow = 'hidden';
+            content.style.height = '0px';
+            content.style.paddingTop = '0px';
+            content.style.paddingBottom = '0px';
+            content.offsetHeight;
+
+            const targetHeight = content.scrollHeight;
+            content.style.height = `${targetHeight}px`;
+            content.style.paddingTop = '';
+            content.style.paddingBottom = '';
+
+            window.setTimeout(() => {
+                content.style.height = '';
+                content.style.overflow = '';
+            }, 300);
+            return;
+        }
+
+        content.style.overflow = 'hidden';
+        content.style.height = `${content.scrollHeight}px`;
+        content.offsetHeight;
+        content.style.height = '0px';
+        content.style.paddingTop = '0px';
+        content.style.paddingBottom = '0px';
+
+        window.setTimeout(() => {
+            details.removeAttribute('open');
+            content.style.height = '';
+            content.style.paddingTop = '';
+            content.style.paddingBottom = '';
+            content.style.overflow = '';
+        }, 300);
+    }
+
+    function initFaqAccordion() {
+        document.querySelectorAll('details.faq-item').forEach((details) => {
+            const summary = details.querySelector('summary');
+            if (!summary) return;
+
+            summary.addEventListener('click', (event) => {
+                event.preventDefault();
+                animateFaqContent(details, !details.open);
+            });
+        });
+    }
+
+    function initCvPopup() {
+        const cvButton = document.getElementById('download-cv-btn');
+        const cvPopup = document.getElementById('cv-popup');
+        const closeButton = document.getElementById('close-cv-popup');
+
+        if (!cvButton || !cvPopup || !closeButton) return;
+
+        cvButton.addEventListener('click', (event) => {
+            event.preventDefault();
+            cvPopup.classList.remove('hidden');
+        });
+
+        closeButton.addEventListener('click', () => {
+            cvPopup.classList.add('hidden');
+        });
+
+        cvPopup.addEventListener('click', (event) => {
+            if (event.target === cvPopup) {
+                cvPopup.classList.add('hidden');
+            }
+        });
+    }
+
+    function initVersionTabs() {
+        document.querySelectorAll('.version-tab').forEach((tab) => {
+            tab.addEventListener('click', () => {
+                const card = tab.closest('.project-card');
+                if (!card || tab.classList.contains('active')) return;
+
+                const version = tab.dataset.version;
+                const nextPanel = card.querySelector(`#version-${version}`);
+                if (!nextPanel) return;
+
+                card.querySelectorAll('.version-tab').forEach((button) => button.classList.remove('active'));
+                card.querySelectorAll('.version-panel').forEach((panel) => panel.classList.remove('active'));
+
+                tab.classList.add('active');
+                nextPanel.classList.add('active');
+                revealTargets(Array.from(nextPanel.querySelectorAll('.tech-pill, .project-section, .btn-secondary, .milestones li')));
+            });
+        });
+    }
+
+    function initAboutTabs() {
+        const tabButtons = Array.from(document.querySelectorAll('.tab-btn'));
+        const tabContents = Array.from(document.querySelectorAll('.tab-content'));
+        if (!tabButtons.length || !tabContents.length) return;
+
+        let isAnimating = false;
+
+        tabButtons.forEach((button) => {
+            button.addEventListener('click', () => {
+                if (isAnimating || button.classList.contains('active')) return;
+
+                const targetId = button.dataset.tab;
+                const currentTab = document.querySelector('.tab-content.active');
+                const nextTab = document.getElementById(targetId);
+                const activeButton = document.querySelector('.tab-btn.active');
+
+                if (!currentTab || !nextTab || !activeButton) return;
+
+                activeButton.classList.remove('active');
+                button.classList.add('active');
+
+                if (isReducedMotion()) {
+                    currentTab.classList.remove('active');
+                    nextTab.classList.add('active');
+                    revealAboutContent(nextTab);
+                    return;
+                }
+
+                isAnimating = true;
+                currentTab.classList.add('fading-out');
+
+                window.setTimeout(() => {
+                    currentTab.classList.remove('active', 'fading-out');
+                    nextTab.classList.add('active');
+                    revealAboutContent(nextTab);
+                    isAnimating = false;
+                }, 300);
+            });
+        });
+
+        revealAboutContent(document.querySelector('.tab-content.active'));
+    }
+
+    function revealAboutContent(tab) {
+        if (!tab) return;
+
+        revealTargets(Array.from(tab.querySelectorAll('.stack-bubble, .bubble-card, .cert-card, .active-goal-card, .hobby-slide, .glass-card')));
+    }
+
+    function initHobbyCarousel() {
+        const slides = Array.from(document.querySelectorAll('.hobby-slide'));
+        const nextButton = document.getElementById('next-hobby');
+        const prevButton = document.getElementById('prev-hobby');
+        const counter = document.getElementById('hobby-counter');
+
+        if (!slides.length || !nextButton || !prevButton || !counter) return;
+
+        let currentIndex = Math.max(slides.findIndex((slide) => slide.classList.contains('active')), 0);
+
+        function updateCarousel() {
+            slides.forEach((slide, index) => {
+                slide.classList.toggle('active', index === currentIndex);
+            });
+            counter.textContent = `${currentIndex + 1} / ${slides.length}`;
+            revealTargets([slides[currentIndex]]);
+        }
+
+        nextButton.addEventListener('click', () => {
+            currentIndex = (currentIndex + 1) % slides.length;
+            updateCarousel();
+        });
+
+        prevButton.addEventListener('click', () => {
+            currentIndex = (currentIndex - 1 + slides.length) % slides.length;
+            updateCarousel();
+        });
+
+        updateCarousel();
+    }
+
+    function initFolderTabs() {
+        const folderTabs = Array.from(document.querySelectorAll('.folder-tab'));
+        if (!folderTabs.length) return;
+
+        folderTabs.forEach((tab) => {
+            tab.addEventListener('click', () => {
+                if (tab.classList.contains('active')) return;
+
+                const panelId = tab.dataset.panel;
+                const nextPanel = document.getElementById(panelId);
+                if (!nextPanel) return;
+
+                folderTabs.forEach((button) => button.classList.remove('active'));
+                document.querySelectorAll('.folder-panel').forEach((panel) => panel.classList.remove('active'));
+
+                tab.classList.add('active');
+                nextPanel.classList.add('active');
+                revealTargets(Array.from(nextPanel.querySelectorAll('.cert-card, .active-goal-card, .glass-card')));
+            });
+        });
+    }
+
+    function initLightbox() {
+        const lightbox = document.getElementById('cert-lightbox');
+        const image = document.getElementById('lb-img');
+        const title = document.getElementById('lb-title');
+        const description = document.getElementById('lb-desc');
+
+        if (!lightbox || !image || !title || !description) return;
+
+        const closeLightbox = () => {
+            lightbox.classList.remove('open');
+        };
+
+        window.openLightbox = (src, certTitle, certDescription) => {
+            image.src = src;
+            title.textContent = certTitle;
+            description.textContent = certDescription;
+            lightbox.classList.add('open');
+        };
+
+        window.closeLightbox = closeLightbox;
+
+        lightbox.addEventListener('click', (event) => {
+            if (event.target === lightbox) {
+                closeLightbox();
+            }
+        });
+    }
+
+    function initHeaderScroll() {
+        const header = document.querySelector('.floating-header');
+        if (!header) return;
+
+        const updateHeaderVisibility = () => {
+            const currentScrollTop = window.pageYOffset || document.documentElement.scrollTop;
+
+            if (currentScrollTop > lastScrollTop && currentScrollTop > 100) {
+                header.classList.add('header-hidden');
+            } else {
+                header.classList.remove('header-hidden');
+            }
+
+            lastScrollTop = currentScrollTop <= 0 ? 0 : currentScrollTop;
+            scrollQueued = false;
+        };
+
+        window.addEventListener('scroll', () => {
+            if (scrollQueued) return;
+            scrollQueued = true;
+            window.requestAnimationFrame(updateHeaderVisibility);
+        }, { passive: true });
+    }
+
+    function initDevelopmentPopup() {
         const devPopup = document.getElementById('dev-popup');
-        const closeBtn = document.getElementById('close-popup');
-        
-        if (devPopup && closeBtn) {
-            let devPopupLoads = localStorage.getItem('dev_popup_loads');
-            
-            if (!devPopupLoads) {
-                // First visit
+        const closeButton = document.getElementById('close-popup');
+
+        if (!devPopup || !closeButton) return;
+
+        window.setTimeout(() => {
+            const loadsRaw = localStorage.getItem('dev_popup_loads');
+            const loads = loadsRaw ? Number.parseInt(loadsRaw, 10) : 0;
+
+            if (!loads || loads >= 3) {
                 devPopup.classList.remove('hidden');
                 localStorage.setItem('dev_popup_loads', '1');
-            } else {
-                let loads = parseInt(devPopupLoads, 10);
-                if (loads >= 3) {
-                    // Every 3 reloads
-                    devPopup.classList.remove('hidden');
-                    localStorage.setItem('dev_popup_loads', '1');
-                } else {
-                    localStorage.setItem('dev_popup_loads', (loads + 1).toString());
-                }
+                return;
             }
-            
-            closeBtn.addEventListener('click', () => {
+
+            localStorage.setItem('dev_popup_loads', String(loads + 1));
+        }, 100);
+
+        closeButton.addEventListener('click', () => {
+            devPopup.classList.add('hidden');
+        });
+
+        devPopup.addEventListener('click', (event) => {
+            if (event.target === devPopup) {
                 devPopup.classList.add('hidden');
-            });
-        }
-    }, 100);
-});
-
-// ==========================================
-// GITHUB STATS (Preserved from original)
-// ==========================================
-function timeAgo(date) {
-    const seconds = Math.floor((new Date() - new Date(date)) / 1000);
-    let interval = Math.floor(seconds / 31536000);
-    if (interval > 1) return `há ${interval} anos`;
-    interval = Math.floor(seconds / 2592000);
-    if (interval > 1) return `há ${interval} meses`;
-    interval = Math.floor(seconds / 86400);
-    if (interval > 1) return `há ${interval} dias`;
-    interval = Math.floor(seconds / 3600);
-    if (interval > 1) return `há ${interval} horas`;
-    interval = Math.floor(seconds / 60);
-    if (interval > 1) return `há ${interval} minutos`;
-    return "agora mesmo";
-}
-
-async function fetchGitHubStats() {
-    const containers = document.querySelectorAll('.github-stats-container');
-    if (containers.length === 0) return;
-
-    const CACHE_TIME = 60 * 60 * 1000; // 1 hour
-
-    for (const container of containers) {
-        const repo = container.getAttribute('data-repo');
-        if (!repo) continue;
-
-        // Show skeleton
-        container.innerHTML = `
-            <div class="stat-skeleton skeleton-sm"></div>
-            <div class="stat-skeleton skeleton-md"></div>
-            <div class="stat-skeleton skeleton-lg"></div>
-        `;
-
-        try {
-            const cacheKey = `gh_stats_${repo}`;
-            const cached = localStorage.getItem(cacheKey);
-            if (cached) {
-                const { data, timestamp } = JSON.parse(cached);
-                if (Date.now() - timestamp < CACHE_TIME) {
-                    renderStats(container, data);
-                    continue;
-                }
             }
-
-            const [repoRes, commitsRes] = await Promise.all([
-                fetch(`https://api.github.com/repos/${repo}`),
-                fetch(`https://api.github.com/repos/${repo}/commits?per_page=1`)
-            ]);
-
-            if (!repoRes.ok || !commitsRes.ok) throw new Error('GitHub API Error');
-
-            const repoData = await repoRes.json();
-            const commitsData = await commitsRes.json();
-
-            let totalCommits = 0;
-            const linkHeader = commitsRes.headers.get('Link');
-            if (linkHeader) {
-                const match = linkHeader.match(/&page=(\d+)>; rel="last"/);
-                totalCommits = match ? parseInt(match[1], 10) : commitsData.length;
-            } else {
-                totalCommits = commitsData.length;
-            }
-
-            const stats = {
-                stars: repoData.stargazers_count,
-                commits: totalCommits,
-                lastDate: commitsData[0]?.commit.author.date || null,
-                lastAuthor: commitsData[0]?.author?.login || commitsData[0]?.commit.author.name || '?'
-            };
-
-            localStorage.setItem(cacheKey, JSON.stringify({ data: stats, timestamp: Date.now() }));
-            renderStats(container, stats);
-
-        } catch (error) {
-            console.error(`Erro GitHub (${repo}):`, error);
-            container.innerHTML = `<div class="stat-error">⚠️ Erro ao carregar métricas do GitHub.</div>`;
-        }
+        });
     }
-}
 
-function renderStats(container, data) {
-    const starLabel = data.stars === 1 ? 'Star' : 'Stars';
-    const commitLabel = data.commits === 1 ? 'Commit' : 'Commits';
-    const timeDisplay = data.lastDate ? timeAgo(data.lastDate) : 'Desconhecido';
+    function pluralize(value, singular, plural) {
+        return `${value} ${value === 1 ? singular : plural}`;
+    }
 
-    container.innerHTML = `
-        <div class="stat-item" title="Estrelas no GitHub">
-            <span>⭐</span> <strong>${data.stars}</strong> ${starLabel}
-        </div>
-        <div class="stat-item" title="Total de Commits">
-            <span>🔄</span> <strong>${data.commits}</strong> ${commitLabel}
-        </div>
-        <div class="stat-item" title="Autor do último commit">
-            <span>👤</span> ${data.lastAuthor}
-        </div>
-        <div class="stat-item" title="Data do último commit">
-            <span>📅</span> ${timeDisplay}
-        </div>
-    `;
-}
+    function timeAgo(date) {
+        const seconds = Math.floor((Date.now() - new Date(date).getTime()) / 1000);
+        let interval = Math.floor(seconds / 31536000);
+        if (interval >= 1) return `há ${pluralize(interval, 'ano', 'anos')}`;
+        interval = Math.floor(seconds / 2592000);
+        if (interval >= 1) return `há ${pluralize(interval, 'mês', 'meses')}`;
+        interval = Math.floor(seconds / 86400);
+        if (interval >= 1) return `há ${pluralize(interval, 'dia', 'dias')}`;
+        interval = Math.floor(seconds / 3600);
+        if (interval >= 1) return `há ${pluralize(interval, 'hora', 'horas')}`;
+        interval = Math.floor(seconds / 60);
+        if (interval >= 1) return `há ${pluralize(interval, 'minuto', 'minutos')}`;
+        return 'agora mesmo';
+    }
 
-document.addEventListener('DOMContentLoaded', fetchGitHubStats);
+    function renderStats(container, data) {
+        const starLabel = data.stars === 1 ? 'Star' : 'Stars';
+        const commitLabel = data.commits === 1 ? 'Commit' : 'Commits';
+        const timeDisplay = data.lastDate ? timeAgo(data.lastDate) : 'Desconhecido';
+
+        container.innerHTML = `
+            <div class="stat-item" title="Estrelas no GitHub">
+                <span>⭐</span> <strong>${data.stars}</strong> ${starLabel}
+            </div>
+            <div class="stat-item" title="Total de Commits">
+                <span>🔄</span> <strong>${data.commits}</strong> ${commitLabel}
+            </div>
+            <div class="stat-item" title="Autor do último commit">
+                <span>👤</span> ${data.lastAuthor}
+            </div>
+            <div class="stat-item" title="Data do último commit">
+                <span>📅</span> ${timeDisplay}
+            </div>
+        `;
+    }
+
+    async function fetchGitHubStats() {
+        const containers = Array.from(document.querySelectorAll('.github-stats-container'));
+        if (!containers.length) return;
+
+        const cacheTime = 60 * 60 * 1000;
+
+        await Promise.all(containers.map(async (container) => {
+            const repo = container.getAttribute('data-repo');
+            if (!repo) return;
+
+            container.innerHTML = `
+                <div class="stat-skeleton skeleton-sm"></div>
+                <div class="stat-skeleton skeleton-md"></div>
+                <div class="stat-skeleton skeleton-lg"></div>
+            `;
+
+            try {
+                const cacheKey = `gh_stats_${repo}`;
+                const cachedValue = localStorage.getItem(cacheKey);
+
+                if (cachedValue) {
+                    const { data, timestamp } = JSON.parse(cachedValue);
+                    if (Date.now() - timestamp < cacheTime) {
+                        renderStats(container, data);
+                        return;
+                    }
+                }
+
+                const [repoResponse, commitsResponse] = await Promise.all([
+                    fetch(`https://api.github.com/repos/${repo}`),
+                    fetch(`https://api.github.com/repos/${repo}/commits?per_page=1`)
+                ]);
+
+                if (!repoResponse.ok || !commitsResponse.ok) {
+                    throw new Error('GitHub API error');
+                }
+
+                const repoData = await repoResponse.json();
+                const commitsData = await commitsResponse.json();
+
+                let totalCommits = commitsData.length;
+                const linkHeader = commitsResponse.headers.get('Link');
+                if (linkHeader) {
+                    const match = linkHeader.match(/&page=(\d+)>; rel="last"/);
+                    totalCommits = match ? Number.parseInt(match[1], 10) : totalCommits;
+                }
+
+                const stats = {
+                    stars: repoData.stargazers_count ?? 0,
+                    commits: totalCommits,
+                    lastDate: commitsData[0]?.commit?.author?.date || null,
+                    lastAuthor: commitsData[0]?.author?.login || commitsData[0]?.commit?.author?.name || '?'
+                };
+
+                localStorage.setItem(cacheKey, JSON.stringify({ data: stats, timestamp: Date.now() }));
+                renderStats(container, stats);
+            } catch (error) {
+                console.error(`Erro GitHub (${repo}):`, error);
+                container.innerHTML = '<div class="stat-error">⚠️ Erro ao carregar métricas do GitHub.</div>';
+            }
+        }));
+    }
+
+    function initHomepage() {
+        initFaqAccordion();
+        initCvPopup();
+    }
+
+    function initProjectsPage() {
+        initVersionTabs();
+        fetchGitHubStats();
+    }
+
+    function initAboutPage() {
+        initAboutTabs();
+        initHobbyCarousel();
+        initFolderTabs();
+        initLightbox();
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        initTheme();
+        initParticlesToggle();
+        initHeaderScroll();
+        initDevelopmentPopup();
+        initSharedReveal();
+        initHomepage();
+        initProjectsPage();
+        initAboutPage();
+    });
+})();

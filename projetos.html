@@ -499,56 +499,6 @@
     </div>
     <script defer src="layout.js"></script>
     <script defer src="script.js"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            // ==========================================
-            // LÓGICA DE STAGGERED ANIMATIONS E OBSERVADOR
-            // ==========================================
-            const observerOptions = {
-                root: null,
-                rootMargin: '0px',
-                threshold: 0.2
-            };
-
-            const appearanceObserver = new IntersectionObserver((entries, observer) => {
-                let delayCounter = 0;
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        const el = entry.target;
-                        // Se o elemento não tem '--pop-delay' setado, calcula um delay dinâmico
-                        if (!el.style.getPropertyValue('--pop-delay')) {
-                            el.style.setProperty('--pop-delay', `${delayCounter * 0.15}s`);
-                            delayCounter++;
-                        }
-                        el.classList.add('pop-visible');
-                        observer.unobserve(el); // Para de observar depois que apareceu
-                    }
-                });
-            }, observerOptions);
-
-            document.querySelectorAll('.btn-primary, .btn-secondary, .stat-badge, .social-pill, .faq-item, .bubble-card, .project-card, .future-card, .glass-card').forEach((el) => {
-                appearanceObserver.observe(el);
-            });
-
-            // ==========================================
-            // LÓGICA DAS TABS DE VERSÃO (V1 / V2)
-            // ==========================================
-            document.querySelectorAll('.version-tab').forEach(tab => {
-                tab.addEventListener('click', () => {
-                    const version = tab.dataset.version;
-                    const card = tab.closest('.project-card');
-
-                    // Desativa todas as tabs e painéis dentro deste card
-                    card.querySelectorAll('.version-tab').forEach(t => t.classList.remove('active'));
-                    card.querySelectorAll('.version-panel').forEach(p => p.classList.remove('active'));
-
-                    // Ativa a tab e painel clicados
-                    tab.classList.add('active');
-                    card.querySelector(`#version-${version}`).classList.add('active');
-                });
-            });
-        });
-    </script>
 </body>
 
 </html>
