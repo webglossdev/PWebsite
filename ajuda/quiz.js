@@ -8,6 +8,10 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     container.addEventListener('click', (event) => {
+        if (!quizData) {
+            return;
+        }
+
         const target = event.target;
         if (target && target.id === 'restart-quiz') {
             renderNode('inicio');
@@ -52,6 +56,11 @@ document.addEventListener('DOMContentLoaded', async () => {
             buttonsDiv.style.flexDirection = 'column';
             buttonsDiv.style.gap = '10px';
             buttonsDiv.style.alignItems = 'center';
+
+            if (!Array.isArray(node.opcoes)) {
+                container.innerHTML = '<h2>Erro no fluxo do diagnóstico.</h2><p>Tente novamente em instantes.</p>';
+                return;
+            }
 
             node.opcoes.forEach((opcao) => {
                 const btn = document.createElement('button');
