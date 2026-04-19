@@ -1,1 +1,135 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
 
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ajuda - Webglossdev</title>
+    <meta name="description" content="Pagina de ajuda tecnica do @webglossdev">
+    <link rel="icon" type="image/svg+xml" href="../logo.svg">
+    <link rel="stylesheet" href="../style.css">
+    <style>
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.25);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="content-wrapper">
+        <header class="hero">
+            <img src="../logo.svg" alt="Webglossdev Logo" style="height: 64px;">
+        </header>
+
+        <section class="pro-headline">
+            <p>Precisa de ajuda ou assistencia tecnica barata? aqui voce ja pode ver quanto cobro para coisas especificas sem me contatar.</p>
+        </section>
+
+        <section id="quiz-section" class="glass-card">
+            <h2>Diagnóstico de Problemas</h2>
+            <div id="quiz-content">
+                <!-- Quiz will be loaded here -->
+            </div>
+        </section>
+
+        <footer class="social-footer">
+            <a href="https://linktr.ee/webglossdev" class="social-pill" target="_blank">🌐 Linktree</a>
+        </footer>
+
+        <div class="site-credits">
+            <a href="../LICENSE">GNU GPL v3</a>
+        </div>
+    </div>
+
+    <script defer src="../layout.js"></script>
+    <script defer src="../script.js"></script>
+    <script>
+        // Quiz logic here
+        fetch('quiz.json')
+            .then(response => response.json())
+            .then(data => {
+                const config = data.config;
+                const fluxo = data.fluxo;
+                const resultados = data.resultados;
+                let currentStep = 'inicio';
+
+                const quizContent = document.getElementById('quiz-content');
+
+                function displayStep(step) {
+                    quizContent.innerHTML = '';
+                    const questionData = fluxo[step];
+                    if (!questionData) return;
+
+                    const question = document.createElement('p');
+                    question.textContent = questionData.pergunta;
+                    question.style.fontSize = '1.1rem';
+                    question.style.marginBottom = '20px';
+                    quizContent.appendChild(question);
+
+                    const optionsContainer = document.createElement('div');
+                    optionsContainer.style.display = 'grid';
+                    optionsContainer.style.gridTemplateColumns = 'repeat(auto-fit, minmax(200px, 1fr))';
+                    optionsContainer.style.gap = '12px';
+
+                    questionData.opcoes.forEach(op => {
+                        const button = document.createElement('button');
+                        button.className = 'btn-secondary';
+                        button.textContent = op.label;
+                        button.onclick = () => {
+                            const next = op.next;
+                            if (resultados[next]) {
+                                displayResult(resultados[next]);
+                            } else {
+                                currentStep = next;
+                                displayStep(currentStep);
+                            }
+                        };
+                        optionsContainer.appendChild(button);
+                    });
+
+                    quizContent.appendChild(optionsContainer);
+                }
+
+                function displayResult(result) {
+                    quizContent.innerHTML = '';
+                    const title = document.createElement('h3');
+                    title.textContent = result.titulo;
+                    quizContent.appendChild(title);
+
+                    const desc = document.createElement('p');
+                    desc.textContent = result.descricao;
+                    desc.style.marginBottom = '16px';
+                    quizContent.appendChild(desc);
+
+                    const estimate = document.createElement('p');
+                    estimate.innerHTML = `<strong>Investimento Estimado:</strong> ${result.investimento_estimado}`;
+                    quizContent.appendChild(estimate);
+
+                    const prazo = document.createElement('p');
+                    prazo.innerHTML = `<strong>Prazo Médio:</strong> ${result.prazo_medio}`;
+                    quizContent.appendChild(prazo);
+
+                    const whatsappBtn = document.createElement('a');
+                    whatsappBtn.href = `https://wa.me/${config.whatsapp_number}?text=${encodeURIComponent(result.whatsapp_msg)}`;
+                    whatsappBtn.className = 'btn-primary';
+                    whatsappBtn.textContent = 'Contatar via WhatsApp';
+                    whatsappBtn.target = '_blank';
+                    whatsappBtn.style.marginTop = '20px';
+                    quizContent.appendChild(whatsappBtn);
+                }
+
+                displayStep(currentStep);
+            })
+            .catch(error => console.error('Error loading quiz:', error));
+    </script>
+</body>
+
+</html>
