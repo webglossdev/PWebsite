@@ -72,8 +72,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         `;
 
         const restartButton = document.getElementById('restart-quiz');
-        if (restartButton) {
-            restartButton.addEventListener('click', () => renderNode('inicio'));
-        }
+        restartButton.addEventListener('click', () => renderNode('inicio'));
     }
 });
