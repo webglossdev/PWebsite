@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     try {
         const response = await fetch('quiz.json');
         if (!response.ok) {
-            throw new Error(`HTTP ${response.status}`);
+            throw new Error(`Falha ao carregar quiz.json: HTTP ${response.status}`);
         }
 
         quizData = await response.json();
