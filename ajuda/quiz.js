@@ -1,6 +1,18 @@
 document.addEventListener('DOMContentLoaded', async () => {
     const container = document.getElementById('quiz-container');
+    const DIRECT_CONTACT_NODE = 'contato_direto';
     let quizData = null;
+
+    if (!container) {
+        return;
+    }
+
+    container.addEventListener('click', (event) => {
+        const target = event.target;
+        if (target && target.id === 'restart-quiz') {
+            renderNode('inicio');
+        }
+    });
 
     try {
         const response = await fetch('quiz.json');
@@ -16,6 +28,11 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     function renderNode(nodeKey) {
+        if (!quizData || !quizData.fluxo || !quizData.resultados) {
+            container.innerHTML = '<h2>Erro ao carregar o diagnóstico.</h2>';
+            return;
+        }
+
         container.innerHTML = '';
 
         if (quizData.resultados[nodeKey]) {
@@ -48,7 +65,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             return;
         }
 
-        if (nodeKey === 'contato_direto') {
+        if (nodeKey === DIRECT_CONTACT_NODE) {
             container.innerHTML = `
                 <h2>Contato Direto</h2>
                 <p>Parece que o seu caso é muito específico.</p>
@@ -76,10 +93,5 @@ document.addEventListener('DOMContentLoaded', async () => {
             <a href="${waLink}" target="_blank" rel="noopener noreferrer" class="btn-primary">Solicitar via WhatsApp</a>
             <button id="restart-quiz" class="btn-secondary" style="margin-left: 10px;">Refazer Diagnóstico</button>
         `;
-
-        const restartButton = document.getElementById('restart-quiz');
-        if (restartButton) {
-            restartButton.addEventListener('click', () => renderNode('inicio'));
-        }
     }
 });
