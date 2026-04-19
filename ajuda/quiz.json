@@ -3,7 +3,7 @@
                 "version": "1.0",
                 "currency": "BRL",
                 "taxa_base_diagnostico": 30,
-                "whatsapp_number": "5521971351119"
+                "whatsapp_number": "5521971351119" // Added missing whatsapp number
             },
             "fluxo": {
                 "inicio": {
@@ -117,4 +117,4 @@
                     "whatsapp_msg": "Gostaria de ajuda para configurar síntese de voz ou geração de imagens por IA."
                 }
             }
-        }
+        };
