@@ -48,11 +48,17 @@ document.addEventListener('DOMContentLoaded', async () => {
             return;
         }
 
-        container.innerHTML = `
-            <h2>Contato Direto</h2>
-            <p>Parece que o seu caso é muito específico.</p>
-            <a href="https://wa.me/${quizData.config.whatsapp_number}" target="_blank" rel="noopener noreferrer" class="btn-primary" style="margin-top:20px; display:inline-block;">Falar no WhatsApp</a>
-        `;
+        if (nodeKey === 'contato_direto') {
+            container.innerHTML = `
+                <h2>Contato Direto</h2>
+                <p>Parece que o seu caso é muito específico.</p>
+                <a href="https://wa.me/${quizData.config.whatsapp_number}" target="_blank" rel="noopener noreferrer" class="btn-primary" style="margin-top:20px; display:inline-block;">Falar no WhatsApp</a>
+            `;
+            return;
+        }
+
+        container.innerHTML = '<h2>Erro no fluxo do diagnóstico.</h2><p>Tente novamente em instantes.</p>';
+        console.error('Nó de quiz inválido:', nodeKey);
     }
 
     function renderResult(resultado) {
@@ -72,6 +78,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         `;
 
         const restartButton = document.getElementById('restart-quiz');
-        restartButton.addEventListener('click', () => renderNode('inicio'));
+        if (restartButton) {
+            restartButton.addEventListener('click', () => renderNode('inicio'));
+        }
     }
 });
