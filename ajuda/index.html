@@ -1,1 +1,496 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
 
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diagnóstico Técnico | webglossdev</title>
+    <link rel="icon" type="image/svg+xml" href="../logo.svg">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+
+        :root {
+            /* Web Gloss 2.0 / Aero Dark Variables */
+            --bg-primary: #020617; 
+            --aero-glass-bg: rgba(15, 23, 42, 0.45);
+            --aero-glass-border-top: rgba(255, 255, 255, 0.15);
+            --aero-glass-border: rgba(255, 255, 255, 0.05);
+            --aero-glow: rgba(56, 189, 248, 0.2);
+            --text-primary: #f8fafc;
+            --text-muted: #94a3b8;
+            --accent: #38bdf8;
+            --accent-hover: #0284c7;
+            --success: #10b981;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Inter', -apple-system, sans-serif;
+            background: radial-gradient(circle at top right, #0f172a, #020617);
+            background-color: var(--bg-primary);
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            background-repeat: no-repeat;
+            color: var(--text-primary);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .bg-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle at top right, rgba(15, 23, 42, 0.7), rgba(2, 6, 23, 0.95));
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .landing-header {
+            text-align: center;
+            width: 100%;
+            max-width: 800px;
+            margin: 40px auto 20px auto;
+            position: relative;
+            z-index: 2;
+            padding: 0 24px;
+            box-sizing: border-box;
+            animation: fadeIn 0.6s ease forwards;
+        }
+
+        .landing-header h1 {
+            font-size: 2.2rem;
+            margin-bottom: 16px;
+            text-shadow: 0 4px 15px rgba(0,0,0,0.9);
+            font-weight: 700;
+        }
+
+        .landing-header p {
+            font-size: 1.1rem;
+            color: var(--text-muted);
+            line-height: 1.6;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.9);
+            margin: 0;
+        }
+
+        /* Unique Header */
+        .aero-nav {
+            width: 100%;
+            padding: 16px 24px;
+            background: linear-gradient(180deg, rgba(30, 41, 59, 0.7) 0%, rgba(15, 23, 42, 0.5) 100%);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--aero-glass-border-top);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-sizing: border-box;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .aero-nav img {
+            height: 32px;
+            filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.15));
+            transition: transform 0.3s ease;
+        }
+        
+        .aero-nav img:hover {
+            transform: scale(1.05);
+        }
+
+        /* Wrapping Container to take remaining height */
+        .quiz-wrapper {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            padding: 24px;
+            box-sizing: border-box;
+        }
+
+        .quiz-container {
+            background: var(--aero-glass-bg);
+            background-image: linear-gradient(180deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.01) 40%, rgba(0,0,0,0.2) 100%);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid var(--aero-glass-border);
+            border-top: 1px solid var(--aero-glass-border-top);
+            border-radius: 16px;
+            padding: 40px;
+            width: 100%;
+            max-width: 600px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7), inset 0 0 20px rgba(255,255,255,0.02);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        /* Subtle Inner Reflection (The defining Aero look) */
+        .quiz-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 35%;
+            background: linear-gradient(180deg, rgba(255,255,255,0.06) 0%, transparent 100%);
+            border-radius: 16px 16px 0 0;
+            pointer-events: none;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 10px;
+            margin-bottom: 30px;
+            overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.05);
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.5);
+            position: relative;
+            z-index: 2;
+        }
+
+        .progress-fill {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, #0ea5e9, #38bdf8);
+            border-radius: 10px;
+            transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 0 10px var(--aero-glow);
+        }
+
+        .question-title {
+            font-size: 1.5rem;
+            margin-bottom: 24px;
+            font-weight: 600;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+            position: relative;
+            z-index: 2;
+        }
+
+        .options-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .option-btn {
+            background: linear-gradient(180deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.02) 50%, rgba(0,0,0,0.1) 100%);
+            border: 1px solid rgba(255,255,255,0.1);
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.1), 0 2px 4px rgba(0,0,0,0.3);
+            color: var(--text-primary);
+            padding: 16px 20px;
+            border-radius: 8px;
+            font-size: 1rem;
+            text-align: left;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .option-btn:hover {
+            background: linear-gradient(180deg, rgba(255,255,255,0.15) 0%, rgba(255,255,255,0.05) 50%, rgba(0,0,0,0.1) 100%);
+            border-color: var(--accent);
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.2), 0 0 15px var(--aero-glow);
+            transform: translateY(-2px);
+        }
+
+        .result-card {
+            display: none;
+            text-align: center;
+            position: relative;
+            z-index: 2;
+        }
+
+        .result-title {
+            color: var(--accent);
+            font-size: 1.6rem;
+            margin-bottom: 12px;
+            text-shadow: 0 2px 10px rgba(56, 189, 248, 0.3);
+        }
+
+        .result-desc {
+            color: var(--text-muted);
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .price-tag {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--accent);
+            margin-bottom: 30px;
+            text-shadow: 0 0 15px var(--aero-glow);
+        }
+
+        .btn-whatsapp {
+            display: inline-block;
+            background: linear-gradient(180deg, #10b981 0%, #059669 100%);
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.3), 0 4px 10px rgba(16, 185, 129, 0.3);
+            color: white;
+            padding: 15px 30px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+            border: 1px solid #047857;
+            transition: all 0.2s;
+            text-shadow: 0 -1px 0 rgba(0,0,0,0.2);
+        }
+
+        .btn-whatsapp:hover {
+            background: linear-gradient(180deg, #34d399 0%, #10b981 100%);
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.4), 0 6px 15px rgba(16, 185, 129, 0.4);
+            transform: translateY(-1px);
+        }
+
+        .btn-back {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            color: var(--text-muted);
+            cursor: pointer;
+            margin-bottom: 24px;
+            font-size: 0.9rem;
+            padding: 6px 14px;
+            border-radius: 20px;
+            transition: all 0.2s;
+            position: relative;
+            z-index: 2;
+            display: none;
+            backdrop-filter: blur(5px);
+        }
+
+        .btn-back:hover {
+            color: var(--text-primary);
+            background: rgba(255,255,255,0.1);
+            border-color: rgba(255,255,255,0.2);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+        }
+
+        .fade-in {
+            animation: fadeIn 0.4s ease forwards;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .loading-text {
+            text-align: center;
+            color: var(--text-muted);
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 0.6; }
+            50% { opacity: 1; }
+            100% { opacity: 0.6; }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="bg-overlay"></div>
+
+    <nav class="aero-nav">
+        <img src="../logo.svg" alt="webglossdev">
+    </nav>
+
+    <div class="landing-header">
+        <h1>Precisa de ajuda e ou assistencia tecnica?</h1>
+        <p>Entao voce veio pro lugar ceerto, descreva seu problema abaixo e receba uma estimativa de quanto eu cobraria para o servico sem precisar me contatar antes.</p>
+    </div>
+
+    <div class="quiz-wrapper">
+        <div class="quiz-container">
+            <button class="btn-back" id="btn-back" onclick="goBack()">← Voltar</button>
+
+            <div class="progress-bar" id="progress-container">
+                <div class="progress-fill" id="progress-fill"></div>
+            </div>
+
+            <div id="question-area" class="fade-in">
+                <h2 class="question-title" id="question-title">
+                    <div class="loading-text">Carregando diagnóstico...</div>
+                </h2>
+                <div class="options-grid" id="options-grid">
+                </div>
+            </div>
+
+            <div id="result-area" class="result-card">
+                <h2 class="result-title" id="result-title">Diagnóstico Concluído</h2>
+                <p class="result-desc" id="result-desc"></p>
+                <div class="price-tag" id="result-price"></div>
+                <a href="#" id="btn-whatsapp" class="btn-whatsapp" target="_blank">Falar com o Técnico</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let quizData = null;
+        let historyStack = [];
+
+        async function loadQuizData() {
+            try {
+                const response = await fetch('quiz.json');
+                if (!response.ok) {
+                    throw new Error('Falha ao carregar quiz.json');
+                }
+                quizData = await response.json();
+                renderStep('inicio');
+            } catch (error) {
+                console.error("Erro ao inicializar fluxo:", error);
+                document.getElementById('question-title').innerHTML = '<div class="loading-text" style="color: #ef4444;">Erro ao carregar dados. Tente novamente mais tarde.</div>';
+            }
+        }
+
+        function renderStep(stepId) {
+            if (!quizData) return;
+
+            const questionArea = document.getElementById('question-area');
+            const resultArea = document.getElementById('result-area');
+            const btnBack = document.getElementById('btn-back');
+            const progressFill = document.getElementById('progress-fill');
+
+            // Reinicia a animação de Fade
+            questionArea.classList.remove('fade-in');
+            void questionArea.offsetWidth; // Trigger reflow para reiniciar animação
+            questionArea.classList.add('fade-in');
+
+            // Exibe ou esconde o botão "Voltar"
+            btnBack.style.display = historyStack.length > 0 ? 'inline-block' : 'none';
+
+            // PERGUNTA
+            if (quizData.fluxo[stepId]) {
+                const stepData = quizData.fluxo[stepId];
+
+                questionArea.style.display = 'block';
+                resultArea.style.display = 'none';
+                document.getElementById('progress-container').style.display = 'block';
+
+                // Cálculo visual do progresso
+                const maxSteps = 4; // Aproximação de passos máximos (para o UI)
+                const currentStep = Math.min(historyStack.length + 1, maxSteps);
+                const progress = Math.min((currentStep / maxSteps) * 100, 95);
+                progressFill.style.width = `${progress}%`;
+
+                // Título da etapa de pergunta
+                document.getElementById('question-title').innerText = stepData.pergunta;
+
+                // Opções de reposta
+                const optionsGrid = document.getElementById('options-grid');
+                optionsGrid.innerHTML = ''; 
+
+                stepData.opcoes.forEach(opcao => {
+                    const btn = document.createElement('button');
+                    btn.className = 'option-btn';
+                    btn.innerText = opcao.label;
+                    btn.onclick = () => {
+                        historyStack.push(stepId);
+                        renderStep(opcao.next);
+                    };
+                    optionsGrid.appendChild(btn);
+                });
+
+            }
+            // RESULTADO
+            else if (quizData.resultados[stepId]) {
+                const resultData = quizData.resultados[stepId];
+
+                questionArea.style.display = 'none';
+                resultArea.style.display = 'block';
+                document.getElementById('progress-container').style.display = 'none';
+
+                // Títulos e informações
+                document.getElementById('result-title').innerText = resultData.titulo;
+                document.getElementById('result-desc').innerText = resultData.descricao;
+                document.getElementById('result-price').innerText = `Estimativa: ${resultData.investimento_estimado}`;
+
+                // Link para WhatsApp (Carregar da config)
+                const phone = quizData.config.whatsapp_number;
+                const encodedMsg = encodeURIComponent(resultData.whatsapp_msg);
+                document.getElementById('btn-whatsapp').href = `https://wa.me/${phone}?text=${encodedMsg}`;
+            } else {
+                // Caso falhe de alguma forma
+                document.getElementById('question-title').innerText = "Fim da linha. (Erro de fluxo interno)";
+                document.getElementById('options-grid').innerHTML = '';
+            }
+        }
+
+        // Função do botão Voltar
+        window.goBack = function() {
+            if (historyStack.length > 0) {
+                const previousStep = historyStack.pop();
+                renderStep(previousStep);
+            }
+        };
+
+        function loadBackground() {
+            const customPhotos = [
+                'asadal_stock_103.jpg', 'asadal_stock_150.jpg', 'asadal_stock_169.jpg',
+                'asadal_stock_28.jpg', 'asadal_stock_29.jpg', 'asadal_stock_49.jpg',
+                'asadal_stock_56.jpg', 'asadal_stock_59.jpg', 'asadal_stock_6.jpg',
+                'asadal_stock_69.jpg', 'asadal_stock_7.jpg', 'asadal_stock_70.jpg',
+                'asadal_stock_71.jpg', 'asadal_stock_75.jpg', 'asadal_stock_78.jpg',
+                'asadal_stock_79.jpg', 'asadal_stock_80.jpg', 'saadsd.jpg'
+            ];
+            
+            const formats = ['jpg', 'png', 'webp', 'jpeg', 'gif', 'avif'];
+            const names = ['bg1', 'bg2', 'bg3', 'background', 'fundo', 'photo', 'photo1', '1'];
+
+            const dynamicPossibilities = [];
+            for (let name of names) {
+                for (let ext of formats) {
+                    dynamicPossibilities.push(`${name}.${ext}`);
+                }
+            }
+
+            const allPossibilities = [...customPhotos, ...dynamicPossibilities];
+            const shuffled = allPossibilities.sort(() => 0.5 - Math.random());
+            
+            let attemptIndex = 0;
+            const MAX_ATTEMPTS = 15; 
+
+            function tryNextImage() {
+                if (attemptIndex >= shuffled.length || attemptIndex >= MAX_ATTEMPTS) return;
+                
+                const photoToTry = shuffled[attemptIndex];
+                const img = new Image();
+                img.src = `photos/${photoToTry}`;
+                
+                img.onload = () => {
+                    document.body.style.backgroundImage = `url('photos/${photoToTry}')`;
+                };
+                
+                img.onerror = () => {
+                    attemptIndex++;
+                    tryNextImage();
+                };
+            }
+            
+            tryNextImage();
+        }
+
+        // Inicializa fluxo na inicialização da página
+        window.onload = () => {
+            loadBackground();
+            loadQuizData();
+        };
+    </script>
+</body>
+</html>
