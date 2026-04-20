@@ -192,13 +192,15 @@ strong {
     right: 0;
     z-index: 1000;
     height: var(--header-height);
-    background: var(--bg-primary);
+    background: color-mix(in srgb, var(--bg-primary) 70%, transparent);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
     border-bottom: 1px solid var(--border-color);
     display: flex;
     align-items: center;
     justify-content: center;
     padding: 0 24px;
-    transition: transform 0.3s ease, background-color 0.3s ease;
+    transition: transform 0.3s ease, background-color 0.3s ease, backdrop-filter 0.3s ease;
 }
 
 .floating-header.header-hidden {
@@ -494,7 +496,9 @@ strong {
 
 /* Glass card — used on about and contact pages */
 .glass-card {
-    background: var(--bg-primary);
+    background: color-mix(in srgb, var(--bg-primary) 80%, transparent);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
     box-shadow: var(--shadow-border);
     border-radius: var(--radius-lg);
     padding: 32px;
