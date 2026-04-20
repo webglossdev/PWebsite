@@ -744,7 +744,11 @@
         // ─── Quiz Loader ────────────────────────────────
         async function loadQuizData() {
             try {
-                const res = await fetch('quiz.json');
+                // Use absolute path derived from the current page location to avoid
+                // Vercel's trailing-slash issue where fetch('quiz.json') resolves to the
+                // root instead of /ajuda/ when the URL has no trailing slash.
+                const base = new URL('./', window.location.href).href;
+                const res = await fetch(base + 'quiz.json');
                 if (!res.ok) throw new Error('HTTP ' + res.status);
                 quizData = await res.json();
                 renderStep('inicio');
