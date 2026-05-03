@@ -10,7 +10,7 @@
             "pergunta": "Qual o seu tipo de problema?",
             "opcoes": [
                 {
-                    "label": "🛠️ Hardware & Eletrônica",
+                    "label": "🛠️ Assistencia Hardware & Eletrônica",
                     "next": "hardware_tipo"
                 },
                 {
@@ -47,37 +47,53 @@
                     "next": "controller_sintomas"
                 },
                 {
-                    "label": "Monitor (Abaixo de 25\")",
+                    "label": "Monitor (Abaixo de 25 pol)",
                     "next": "monitor_sintomas"
                 },
                 {
-                    "label": "Outros",
-                    "next": "contato_direto"
+                    "label": "Quero ajuda para comprar o melhor dispositivo para meu uso.",
+                    "next": "ajudacompra"
+                },
+                {
+                    "label": "Outro",
+                    "next": "outro_hw"
                 }
             ]
         },
         "pc_sintomas": {
-            "pergunta": "Que sintoma o computador apresenta?",
+            "pergunta": "Qual o problema ou servico necessario?",
             "opcoes": [
                 {
-                    "label": "Ele não liga (Mudo)",
-                    "next": "resumo_hardware_mudo"
+                    "label": "Ele não liga",
+                    "next": "pc_nliga"
                 },
                 {
-                    "label": "Liga, mas não dá imagem / Artefatos",
-                    "next": "resumo_gpu_reballing"
+                    "label": "Liga, mas não dá imagem",
+                    "next": "pc_semimg"
                 },
                 {
                     "label": "Lentidão ou Erros de Sistema",
-                    "next": "resumo_pc_software"
+                    "next": "pc_lentoerro"
                 },
                 {
                     "label": "Superaquecimento / Barulho excessivo",
-                    "next": "resumo_limpeza_premium"
+                    "next": "pc_spa"
                 },
                 {
                     "label": "Tuning (Overclock/Undervolt/BIOS)",
-                    "next": "resumo_pc_tuning"
+                    "next": "pc_oc"
+                },
+                {
+                    "label": "Quando liga ha listras e e problemas visuais na tela / Artefatos",
+                    "next": "pc_art"
+                },
+                {
+                    "label": "Desliga do nada",
+                    "next": "pc_desl"
+                },
+                {
+                    "label": "Remocao de virus profunda (sist. de arq., registro e wservices)",
+                    "next": "virus"
                 }
             ]
         },
