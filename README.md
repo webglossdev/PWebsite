@@ -1,6 +1,6 @@
 # PWebsite
 -
-Código do meu website, não está mais na VPS do Oracle Cloud já que ela vai desligar sozinha após um tempo por falta de uso e não to afim de fazer um cron só pra não deixar ele desligar, então migrei pro vercel.
+Código do website, não está mais na VPS do Oracle Cloud já que ela vai desligar sozinha após um tempo por falta de uso e não to afim de fazer um cron só pra não deixar ele desligar, então migrei pro vercel.
 -
 Base do código feito por IA (Gemini 3.1 Pro) e depois editado e continuado por mim (Começei a fazer este site quando tinha pouco conhecimento em front-end).
 
