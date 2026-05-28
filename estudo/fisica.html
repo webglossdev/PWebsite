@@ -571,7 +571,8 @@
                                                 da Terra. Sempre aponta verticalmente para baixo (centro do planeta):
                                                 <span class="text-physicsBlue">$$P = m \cdot g$$</span> <span
                                                     class="text-[10px] text-zinc-400">($g \approx 10\text{ m/s}^2$ na
-                                                    Terra)</span></li>
+                                                    Terra)</span>
+                                            </li>
                                             <li>• <strong class="text-white">Força Elétrica ($F$):</strong> Interação
                                                 entre cargas eletrostáticas. Segue a Lei de Coulomb.</li>
                                             <li>• <strong class="text-white">Força Magnética:</strong> Atração ou
@@ -683,10 +684,9 @@
                     </div>
                 </div>
             </div>
-        </div>
 
-        <!-- 2. Simulador Interativo: Diagrama de Forças (Corpo Livre) -->
-        <div class="bg-bgCard rounded-2xl border border-borderMuted overflow-hidden" id="container-diagrama">
+            <!-- 2. Simulador Interativo: Diagrama de Forças (Corpo Livre) -->
+            <div class="bg-bgCard rounded-2xl border border-borderMuted overflow-hidden" id="container-diagrama">
             <button onclick="toggleAccordion('content-diagrama', this)"
                 class="w-full flex justify-between items-center p-6 hover:bg-bgHover transition-all focus:outline-none">
                 <div class="flex items-center gap-4">
@@ -1157,7 +1157,8 @@
                                 <!-- Simulador da 2a Lei -->
                                 <div class="bg-bgBase p-5 rounded-xl border border-borderMuted space-y-4">
                                     <h4 class="font-bold text-white text-xs uppercase tracking-wider text-physicsBlue">
-                                        <i class="fa-solid fa-chart-line mr-1"></i> Explorador Visual da 2ª Lei</h4>
+                                        <i class="fa-solid fa-chart-line mr-1"></i> Explorador Visual da 2ª Lei
+                                    </h4>
                                     <div class="space-y-4 text-xs">
                                         <div class="space-y-2">
                                             <div class="flex justify-between">
@@ -2197,13 +2198,153 @@
                 tab: "historia",
                 target: "tab-historia",
                 keywords: ["história", "tales de mileto", "âmbar", "elektron", "surgimento", "termo", "grecia"]
-            },
-            "D) Um decréscimo drástico na voltagem fornecida pela companhia de eletricidade."
-        ],
-            correct: 1,
-            explanation: "Se a resistência ($R$) do caminho percorrido cai a valores quase nulos, a corrente ($I = U/R$) dispara ao infinito matemático. Esse fluxo gigantesco de elétrons choca-se violentamente contra a rede atômica do metal (Efeito Joule), liberando calor extremo instantâneo."
             }
         ];
+
+        // ================= BANCO DE QUESTÕES DO SIMULADO =================
+        const QUIZ_QUESTIONS_ALL = [
+            {
+                tags: "Dinâmica: 2ª Lei", diff: "Fácil",
+                title: "Um corpo de massa 4 kg está sujeito a uma força resultante de 20 N. Qual é a aceleração adquirida pelo corpo?",
+                options: ["A) 2 m/s²", "B) 5 m/s²", "C) 10 m/s²", "D) 80 m/s²"],
+                correct: 1,
+                explanation: "Pela 2ª Lei de Newton: $F_R = m \\cdot a \\implies a = F_R / m = 20 / 4 = 5\\text{ m/s}^2$."
+            },
+            {
+                tags: "Dinâmica: Peso", diff: "Fácil",
+                title: "Qual é o peso de um objeto de massa 8 kg na superfície da Terra? (Use $g = 10\\text{ m/s}^2$)",
+                options: ["A) 8 N", "B) 80 N", "C) 0,8 N", "D) 800 N"],
+                correct: 1,
+                explanation: "$P = m \\cdot g = 8 \\times 10 = 80\\text{ N}$."
+            },
+            {
+                tags: "Dinâmica: 3ª Lei", diff: "Médio",
+                title: "Sobre a 3ª Lei de Newton (Ação e Reação), marque a alternativa CORRETA:",
+                options: [
+                    "A) As forças de ação e reação atuam no mesmo corpo e se anulam.",
+                    "B) As forças de ação e reação atuam em corpos diferentes, possuem mesma intensidade, mesma direção e sentidos opostos.",
+                    "C) A força de reação é sempre menor que a força de ação.",
+                    "D) As forças de ação e reação só existem quando os corpos estão em contato direto."
+                ],
+                correct: 1,
+                explanation: "Par ação-reação SEMPRE atua em corpos distintos, com mesma intensidade, mesma direção e sentidos opostos. Nunca se anulam pois agem em corpos diferentes."
+            },
+            {
+                tags: "Dinâmica: Vetores", diff: "Médio",
+                title: "Duas forças perpendiculares entre si, de módulos $F_1 = 6\\text{ N}$ e $F_2 = 8\\text{ N}$, atuam sobre um corpo. Qual o módulo da força resultante?",
+                options: ["A) 2 N", "B) 14 N", "C) 10 N", "D) 48 N"],
+                correct: 2,
+                explanation: "Forças perpendiculares → Pitágoras: $F_R = \\sqrt{6^2 + 8^2} = \\sqrt{36 + 64} = \\sqrt{100} = 10\\text{ N}$."
+            },
+            {
+                tags: "Dinâmica: Atrito", diff: "Médio",
+                title: "Um bloco de 10 kg repousa sobre uma superfície horizontal com coeficiente de atrito $\\mu = 0{,}4$. Qual a força de atrito máxima? (Use $g = 10\\text{ m/s}^2$)",
+                options: ["A) 4 N", "B) 40 N", "C) 100 N", "D) 400 N"],
+                correct: 1,
+                explanation: "$N = P = m \\cdot g = 100\\text{ N}$. Logo, $F_{at} = \\mu \\cdot N = 0{,}4 \\times 100 = 40\\text{ N}$."
+            },
+            {
+                tags: "Eletricidade: Coulomb", diff: "Difícil",
+                title: "Duas cargas elétricas se repelem com força $F$. Se a distância entre elas for reduzida pela metade, qual será a nova força?",
+                options: ["A) F/2", "B) 2F", "C) 4F", "D) F/4"],
+                correct: 2,
+                explanation: "Pela Lei de Coulomb, $F \\propto 1/d^2$. Dividir $d$ por 2: $F' = F / (1/2)^2 = F \\times 4 = 4F$."
+            },
+            {
+                tags: "Eletricidade: Ohm", diff: "Fácil",
+                title: "Um resistor de $20\\ \\Omega$ é ligado a uma fonte de 100 V. Qual a corrente elétrica que o atravessa?",
+                options: ["A) 0,2 A", "B) 2 A", "C) 5 A", "D) 2000 A"],
+                correct: 2,
+                explanation: "$I = U / R = 100 / 20 = 5\\text{ A}$."
+            },
+            {
+                tags: "Eletricidade: Potência", diff: "Médio",
+                title: "Um chuveiro elétrico funciona em 220 V e consome uma corrente de 30 A. Qual sua potência elétrica?",
+                options: ["A) 6.600 W", "B) 7,33 W", "C) 250 W", "D) 660 W"],
+                correct: 0,
+                explanation: "$P = U \\cdot I = 220 \\times 30 = 6600\\text{ W}$ (ou 6,6 kW)."
+            },
+            {
+                tags: "Eletricidade: Circuitos", diff: "Fácil",
+                title: "Em um circuito em série com 3 resistores, o que acontece se um deles queimar (abrir)?",
+                options: [
+                    "A) Os outros dois continuam funcionando normalmente.",
+                    "B) A corrente total do circuito é interrompida e todos param de funcionar.",
+                    "C) A corrente aumenta nos resistores restantes.",
+                    "D) A tensão sobre os outros resistores diminui."
+                ],
+                correct: 1,
+                explanation: "Em circuito em série existe um único caminho para a corrente. Se ele for interrompido, toda a corrente para."
+            },
+            {
+                tags: "Eletricidade: Circuitos", diff: "Médio",
+                title: "Em um circuito em paralelo, a tensão em cada ramo é:",
+                options: [
+                    "A) Diferente em cada ramo e soma-se para dar a tensão total.",
+                    "B) Igual à tensão da fonte em todos os ramos.",
+                    "C) Dividida proporcionalmente à resistência de cada ramo.",
+                    "D) Zero em todos os ramos."
+                ],
+                correct: 1,
+                explanation: "Em circuito paralelo, a tensão é a mesma em todos os ramos: $U_t = U_1 = U_2 = ...$"
+            },
+            {
+                tags: "Eletricidade: Medidores", diff: "Difícil",
+                title: "Por que o amperímetro deve ser ligado em SÉRIE e nunca em paralelo?",
+                options: [
+                    "A) Porque ele possui resistência interna muito alta.",
+                    "B) Porque ele precisa medir a tensão entre dois pontos.",
+                    "C) Porque sua resistência interna é quase zero; em paralelo, causaria um curto-circuito.",
+                    "D) Porque ele funciona melhor quando recebe pouca corrente."
+                ],
+                correct: 2,
+                explanation: "O amperímetro tem resistência interna ≈ 0. Ligado em paralelo, toda a corrente fluiria por ele (caminho sem resistência), gerando um curto-circuito."
+            },
+            {
+                tags: "Eletricidade: 2ª Ohm", diff: "Difícil",
+                title: "Segundo a 2ª Lei de Ohm ($R = \\rho \\cdot L / A$), o que acontece com a resistência se o comprimento do fio for dobrado e a área da seção transversal for reduzida pela metade?",
+                options: ["A) R duplica", "B) R quadruplica", "C) R fica 8 vezes maior", "D) R não muda"],
+                correct: 1,
+                explanation: "$R = \\rho \\cdot (2L) / (A/2) = \\rho \\cdot 4L/A = 4R$. A resistência quadruplica."
+            },
+            {
+                tags: "Eletricidade: Curto-Circuito", diff: "Médio",
+                title: "O que fisicamente causa o aquecimento extremo durante um curto-circuito?",
+                options: [
+                    "A) A tensão da rede elétrica cai a zero instantaneamente.",
+                    "B) A corrente elétrica dispara porque a resistência do caminho cai a quase zero, gerando Efeito Joule intenso.",
+                    "C) Os elétrons param de se mover dentro do fio condutor.",
+                    "D) Um decréscimo drástico na voltagem fornecida pela companhia de eletricidade."
+                ],
+                correct: 1,
+                explanation: "Se a resistência ($R$) do caminho percorrido cai a valores quase nulos, a corrente ($I = U/R$) dispara ao infinito matemático. Esse fluxo gigantesco de elétrons choca-se violentamente contra a rede atômica do metal (Efeito Joule), liberando calor extremo instantâneo."
+            },
+            {
+                tags: "História: Eletricidade", diff: "Fácil",
+                title: "De onde vem a palavra 'eletricidade'?",
+                options: [
+                    "A) Do latim 'electrum', que significa 'metal brilhante'.",
+                    "B) Do grego 'elektron', que era o nome dado ao âmbar.",
+                    "C) Do nome do cientista Thomas Edison.",
+                    "D) Do árabe 'al-kahrabā', que significa 'atração magnética'."
+                ],
+                correct: 1,
+                explanation: "Tales de Mileto (~600 a.C.) observou que o âmbar ('elektron' em grego) atraía pequenos objetos ao ser atritado. Esse nome originou o termo moderno 'eletricidade'."
+            },
+            {
+                tags: "História: Correntes", diff: "Difícil",
+                title: "Por que a Corrente Alternada (AC) de Tesla venceu a 'Guerra das Correntes' contra a Corrente Contínua (DC) de Edison?",
+                options: [
+                    "A) Porque a AC é mais segura para uso doméstico.",
+                    "B) Porque a AC permite elevar a tensão via transformadores, reduzindo perdas por Efeito Joule em longas distâncias.",
+                    "C) Porque Edison desistiu da disputa voluntariamente.",
+                    "D) Porque a DC não podia ser gerada em usinas hidrelétricas."
+                ],
+                correct: 1,
+                explanation: "A AC permite alterar a tensão facilmente com transformadores. Elevando a tensão para transmissão, a corrente diminui, o que reduz drasticamente as perdas por aquecimento ($P = R \\cdot I^2$)."
+            }
+        ];
+        let QUIZ_QUESTIONS = [];
 
         // ================= CONTROLES DE SISTEMA E ABAS =================
 
