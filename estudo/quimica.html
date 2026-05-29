@@ -1312,7 +1312,11 @@
 
             window.scrollTo({ top: 0, behavior: 'smooth' });
 
-            setTimeout(() => { if (window.MathJax) MathJax.typesetPromise(); }, 200);
+            setTimeout(() => { 
+                if (window.MathJax) {
+                    MathJax.typesetPromise().catch(err => console.warn('MathJax typesetting:', err.message));
+                }
+            }, 200);
 
             if (tabId === 'simulado' && currentQuestionIndex === 0 && quizAnswersSelected === false) {
                 initQuestion();
@@ -1330,7 +1334,11 @@
                 content.classList.add('open');
                 if (chevron) chevron.classList.add('rotate-180');
             }
-            setTimeout(() => { if (window.MathJax) MathJax.typesetPromise(); }, 300);
+            setTimeout(() => { 
+                if (window.MathJax) {
+                    MathJax.typesetPromise().catch(err => console.warn('MathJax typesetting:', err.message));
+                }
+            }, 300);
         }
 
         // ================= BUSCA INTELIGENTE =================
@@ -1920,7 +1928,9 @@
                 optionsBox.appendChild(btn);
             });
 
-            if (window.MathJax) MathJax.typesetPromise();
+            if (window.MathJax) {
+                MathJax.typesetPromise().catch(err => console.warn('MathJax typesetting:', err.message));
+            }
         }
 
         function selectQuizOption(selectedIndex) {
@@ -1960,7 +1970,9 @@
             }
 
             document.getElementById('btn-next-q').disabled = false;
-            if (window.MathJax) MathJax.typesetPromise();
+            if (window.MathJax) {
+                MathJax.typesetPromise().catch(err => console.warn('MathJax typesetting:', err.message));
+            }
         }
 
         function nextQuestion() {
@@ -2099,7 +2111,11 @@
                 document.getElementById('stats-best-score').innerText = `${max}/10`;
             }
 
-            setTimeout(() => { if (window.MathJax) MathJax.typesetPromise(); }, 500);
+            setTimeout(() => { 
+                if (window.MathJax) {
+                    MathJax.typesetPromise().catch(err => console.warn('MathJax typesetting:', err.message));
+                }
+            }, 500);
         });
     </script>
 </body>
